@@ -1,0 +1,37 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #a7b5fd;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track-piece {
+  -webkit-border-radius: 0;
+}
+
+::selection {
+  color: #fff;
+  background: #a69bdfb0;
+}
+
+::-moz-selection {
+  color: #fff;
+  background: #a7b5fd;
+}
+
+::-webkit-selection {
+  color: #fff;
+  background: #a7b5fd;
+}
+
