@@ -17,6 +17,9 @@ import { ChevronDownOutline } from '@vicons/ionicons5';
 import { NIcon } from 'naive-ui';
 import { onMounted } from 'vue';
 import WaveEffect from './WaveEffect.vue';
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 
 const props = defineProps({
     isFullScreen: Boolean,
@@ -25,11 +28,31 @@ const props = defineProps({
 const emit = defineEmits(["pageDown"]);
 
 onMounted(() => {
-
+    GsapTimeline();
 });
 
 const pageDownClick = () => {
     // emit("pageDown", true);
+}
+
+const GsapTimeline = () => {
+    let t1 = gsap.timeline({
+        scrollTrigger: {
+            // trigger: ".home",
+            // pin: true, // 在执行时固定触发器元素
+            start: "top",
+            end: '+=70%',
+            scrub: 0.5, //将动画的进度直接链接到滚动条上
+            //   end: "+=700", // 在滚动 700 px后结束
+        },
+    });
+
+    t1.to(
+        ".page-header-main-title",
+        {
+            translateY: props.isFullScreen ? "45vh" : "35vh",
+        }
+    );
 }
 
 </script>
@@ -43,6 +66,7 @@ const pageDownClick = () => {
     position: relative;
     background-attachment: fixed;
 
+    // z-index: -1;
     &::before {
         content: "";
         position: absolute;
@@ -82,10 +106,14 @@ const pageDownClick = () => {
     justify-content: center;
     align-items: center;
     color: white;
+    overflow: hidden;
 }
 
 .page-header-main-title {
-    position: fixed;
+    // position: fixed;
+    position: relative;
+    // position: sticky;
+    // top: 50%;
     z-index: -1;
 }
 </style>

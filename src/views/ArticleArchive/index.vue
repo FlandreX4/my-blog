@@ -1,8 +1,7 @@
 <template>
+    <PageHeader>文章归档</PageHeader>
     <div class="archive">
-        <PageHeader>文章归档</PageHeader>
-
-        <Card>
+        <Card class="custom-card">
             <div class="archive-container">
                 <div class="article-timeline">
                     <h1 class="archive-year">
@@ -38,6 +37,10 @@ onMounted(() => {
 <style lang='less' scoped>
 .archive {
     // min-height: 1500px;
+    margin: 0 auto;
+    padding: 80px 0;
+    position: relative;
+    z-index: 1;
 }
 
 .archive-container {

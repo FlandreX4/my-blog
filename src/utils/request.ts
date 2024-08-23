@@ -1,18 +1,13 @@
 import axios from "axios";
 import type { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
-import { getServiceBaseURL } from "./service";
-
-// const { url, proxyPattern } = getServiceEnvConfig(import.meta.env);
-
-const isHttpProxy = import.meta.env.DEV && import.meta.env.VITE_HTTP_PROXY === "Y";
-const { baseURL } = getServiceBaseURL(import.meta.env, isHttpProxy);
 
 const requests = axios.create({
-  baseURL,
+  baseURL: "/api",
   timeout: 10000,
   // 请求头
   headers: {
     "Content-Type": "application/json;charset=UTF-8",
+    "API-Authorization": import.meta.env.VITE_API_AUTHORIZATION,
   },
 });
 

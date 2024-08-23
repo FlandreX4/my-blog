@@ -5,22 +5,22 @@
                 12月
             </div>
             <div>
-                <a href="" class="timeline-item-container">
+                <RouterLink :to="'/article/文章标题~'" class="timeline-item-container">
                     <span>03-06</span>
                     <span>[记录] 注册表修改jar文件打开方式</span>
-                </a>
-                <a href="" class="timeline-item-container">
+                </RouterLink>
+                <RouterLink :to="'/article/文章标题~'" class="timeline-item-container">
                     <span>03-06</span>
                     <span>[记录] 注册表修改jar文件打开方式</span>
-                </a>
-                <a href="" class="timeline-item-container">
+                </RouterLink>
+                <RouterLink :to="'/article/文章标题~'" class="timeline-item-container">
                     <span>03-06</span>
                     <span>[记录] 注册表修改jar文件打开方式</span>
-                </a>
-                <a href="" class="timeline-item-container">
+                </RouterLink>
+                <RouterLink :to="'/article/文章标题~'" class="timeline-item-container">
                     <span>03-06</span>
                     <span>[记录] 注册表修改jar文件打开方式</span>
-                </a>
+                </RouterLink>
             </div>
         </div>
 
@@ -29,10 +29,10 @@
                 3月
             </div>
             <div>
-                <a href="" class="timeline-item-container">
+                <RouterLink :to="'/article/文章标题~'" class="timeline-item-container">
                     <span>03-06</span>
                     <span>[记录] 注册表修改jar文件打开方式</span>
-                </a>
+                </RouterLink>
             </div>
         </div>
         <div class=" timeline-item">
@@ -40,10 +40,10 @@
                 3月
             </div>
             <div>
-                <a href="" class="timeline-item-container">
+                <RouterLink :to="'/article/文章标题~'" class="timeline-item-container">
                     <span>03-06</span>
                     <span>[记录] 注册表修改jar文件打开方式</span>
-                </a>
+                </RouterLink>
             </div>
         </div>
     </div>
@@ -51,6 +51,7 @@
 
 <script setup lang='ts'>
 import { onMounted } from 'vue';
+import { RouterLink } from 'vue-router';
 
 onMounted(() => {
 
