@@ -76,9 +76,9 @@ const GsapTimeline = () => {
     scrollTrigger: {
       // trigger: ".home",
       // pin: true, // 在执行时固定触发器元素
-      start: "top top-=100px", // 当触发器的顶部碰到视口的顶部时
-      end: '+=700',
-      scrub: 0.5, //将动画的进度直接链接到滚动条上
+      start: "top top-=80px", // 当触发器的顶部碰到视口的顶部时
+      end: '+=50%',
+      scrub: 0.5, //将动画的进度直接链接到滚动条进度上
       //   end: "+=700", // 在滚动 700 px后结束
       onUpdate: onScrollTriggerUpdate,
     },

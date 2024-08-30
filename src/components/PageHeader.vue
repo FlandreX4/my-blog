@@ -1,7 +1,8 @@
 <template>
     <div class="page-header" :class="{ 'full-screen': isFullScreen }">
         <div class="page-header-main">
-            <div class="page-header-main-title md:text-4xl lg:text-4xl xl:text-5xl">
+            <div class="page-header-main-title md:text-4xl lg:text-4xl xl:text-5xl"
+                :style="`transform: translate3d(0, ${offsetY}px, 0)`">
                 <slot>Flandre's Blog</slot>
             </div>
             <div class="page-down" @click="$emit('pageDown', true)">
@@ -15,11 +16,9 @@
 <script setup lang='ts'>
 import { ChevronDownOutline } from '@vicons/ionicons5';
 import { NIcon } from 'naive-ui';
-import { onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import WaveEffect from './WaveEffect.vue';
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-gsap.registerPlugin(ScrollTrigger);
+import { useScroll } from '@vueuse/core'
 
 const props = defineProps({
     isFullScreen: Boolean,
@@ -27,32 +26,19 @@ const props = defineProps({
 
 const emit = defineEmits(["pageDown"]);
 
+const { y } = useScroll(window);
+let pageHeaderDom: any = undefined;
+
 onMounted(() => {
-    GsapTimeline();
+    pageHeaderDom = document.querySelector(".page-header");
 });
+
+const offsetY = computed(() => {
+    return y.value < pageHeaderDom?.offsetHeight ? y.value : pageHeaderDom?.offsetHeight;
+})
 
 const pageDownClick = () => {
     // emit("pageDown", true);
-}
-
-const GsapTimeline = () => {
-    let t1 = gsap.timeline({
-        scrollTrigger: {
-            // trigger: ".home",
-            // pin: true, // 在执行时固定触发器元素
-            start: "top",
-            end: '+=70%',
-            scrub: 0.5, //将动画的进度直接链接到滚动条上
-            //   end: "+=700", // 在滚动 700 px后结束
-        },
-    });
-
-    t1.to(
-        ".page-header-main-title",
-        {
-            translateY: props.isFullScreen ? "45vh" : "35vh",
-        }
-    );
 }
 
 </script>

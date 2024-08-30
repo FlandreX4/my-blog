@@ -256,7 +256,7 @@ const onPageDown = () => {
 .side-card {
     width: 100%;
     // min-height: 320px;
-    padding: 16px;
+    padding: 30px 16px;
     border-radius: 8px;
     box-shadow: 0 0 16px rgba(0, 0, 0, .1);
     transition: all .2s ease-in-out 0s;
@@ -265,22 +265,23 @@ const onPageDown = () => {
     align-items: center;
 
     .author-avatar {
-        width: 160px;
-        height: 160px;
+        width: 100px;
+        height: 100px;
         margin: 0 auto;
 
         img {
             width: 100%;
             height: 100%;
-            padding: 2px;
+            // padding: 2px;
             border-radius: 50%;
-            box-shadow: 0 0 16px 10px #f7f7f7;
-            border: 1px solid #f7f7f7;
+            // box-shadow: 0 0 16px 10px #f7f7f7;
+            // border: 1px solid #f7f7f7;
+            box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
         }
     }
 
     .author-name {
-        margin-top: 10px;
+        margin-top: 15px;
         font-weight: 400;
         text-align: center;
         color: #333;

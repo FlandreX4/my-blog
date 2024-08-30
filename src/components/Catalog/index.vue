@@ -9,18 +9,6 @@
             @click="handleAnchorClick(anchor, index)">
             <a> {{ anchor.title }} </a>
         </div>
-
-        <div class="catalog-item" v-for="(anchor, index) of titleList" :key="anchor.title"
-            :class="currentIndex === index ? 'active' : ''" :style="{ paddingLeft: `${5 + anchor.indent * 15}px` }"
-            @click="handleAnchorClick(anchor, index)">
-            <a> {{ anchor.title }} </a>
-        </div>
-
-        <div class="catalog-item" v-for="(anchor, index) of titleList" :key="anchor.title"
-            :class="currentIndex === index ? 'active' : ''" :style="{ paddingLeft: `${5 + anchor.indent * 15}px` }"
-            @click="handleAnchorClick(anchor, index)">
-            <a> {{ anchor.title }} </a>
-        </div>
     </div>
 </template>
 
