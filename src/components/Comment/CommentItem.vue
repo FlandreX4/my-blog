@@ -68,9 +68,9 @@ const onReplyClick = (obj: any) => {
 
 <style lang='less' scoped>
 @media (max-width: 767px) {
-    .markdown-body {
-        // padding: 15px;
-    }
+    // .markdown-body {
+    //     // padding: 15px;
+    // }
 }
 
 .markdown-body {

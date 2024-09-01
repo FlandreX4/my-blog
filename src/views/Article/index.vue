@@ -1,5 +1,5 @@
 <template>
-    <PageHeader>文章详细</PageHeader>
+    <DetailPageHeader :article="{ ...article }" />
     <div class="article">
         <Card class="article-card">
             <v-md-preview ref="articleRef" :text="article?.originalContent"></v-md-preview>
@@ -34,26 +34,34 @@
 
                 <div class="post-nav">
                     <div class="post-nav-item"
-                        style="background-image: url('https://static.ttkwsd.top/article/2ce1129fceee7f14cb4cf554ed167534.jpg')">
-                        <a href="">
+                        :style="{ 'background-image': `url(${getThumbnail(prevArticle?.thumbnail)})` }">
+                        <RouterLink :to="prevArticle?.fullPath" v-if="prevArticle">
                             <span class="post-nav-btn">上一篇</span>
-                            <h3 class="post-nav-title">测试文章</h3>
-                        </a>
+                            <h3 class="post-nav-title">{{ prevArticle?.title }}</h3>
+                        </RouterLink>
+                        <div v-else>
+                            <span class="post-nav-btn">上一篇</span>
+                            <h3 class="post-nav-title">{{ prevArticle?.title }}</h3>
+                        </div>
                     </div>
-                    <div class="post-nav-item">
-                        <a href="">
+                    <div class="post-nav-item"
+                        :style="{ 'background-image': `url(${getThumbnail(nextArticle?.thumbnail)})` }">
+                        <RouterLink :to="nextArticle?.fullPath" v-if="nextArticle">
                             <span class="post-nav-btn">下一篇</span>
-                            <h3 class="post-nav-title">测试文章</h3>
-                        </a>
+                            <h3 class="post-nav-title">{{ nextArticle?.title || '无' }}</h3>
+                        </RouterLink>
+                        <div v-else>
+                            <span class="post-nav-btn">下一篇</span>
+                            <h3 class="post-nav-title">{{ nextArticle?.title || '无' }}</h3>
+                        </div>
                     </div>
                 </div>
                 <Comment :postId="article?.id" />
-
             </div>
         </Card>
-        <div class="sidebar">
+        <div class="sidebar" v-if="articleLoaded && isShowCatalog">
             <div class="sidebar-container">
-                <Catalog v-if="articleLoaded" :domRef="articleRef" />
+                <Catalog :domRef="articleRef" @callback="(list) => isShowCatalog = list.length > 0" />
             </div>
         </div>
     </div>
@@ -61,30 +69,33 @@
 
 <script setup lang='ts'>
 import Card from '@/components/Card.vue';
-import PageHeader from '@/components/PageHeader.vue';
-import { computed, onMounted, ref } from 'vue';
-import { getArticleByName } from "@/api/article";
+import DetailPageHeader from '@/components/DetailPageHeader.vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { getArticleByName, getPrevArticle, getNextArticle } from "@/api/article";
 import Catalog from '@/components/Catalog/index.vue'
 import { NIcon } from 'naive-ui';
 import { Link, ShareSocial, PricetagsSharp } from '@vicons/ionicons5';
 import Comment from '@/components/Comment/Comment.vue'
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRoute } from 'vue-router';
 import { parseColorString } from "@/utils/colorConversion";
+import { getThumbnail } from "@/utils/util";
 
+const route = useRoute();
 const article = ref();
 const articleRef = ref();
 const articleLoaded = ref(false);
+const isShowCatalog = ref(true);
+const prevArticle = ref();
+const nextArticle = ref();
 
 onMounted(async () => {
-
-    getArticleByName("hello-halo").then(({ data }) => {
-        console.log('res:', data)
-        article.value = data.data;
-        articleLoaded.value = true;
-    })
-
+    getList();
 });
 
+watch(() => route.params.name, () => {
+    init();
+    getList();
+})
 
 const bgColor = (color: any, a: number = 0.1) => {
     return `rgba(${parseColorString(color).r},${parseColorString(color).g}, ${parseColorString(color).b}, ${a})`;
@@ -92,6 +103,32 @@ const bgColor = (color: any, a: number = 0.1) => {
 
 const getArticleLink = computed(() => decodeURIComponent(location.href));
 const getArticlePath = computed(() => decodeURIComponent(location.pathname));
+
+const init = () => {
+    articleLoaded.value = false;
+    isShowCatalog.value = true;
+    article.value = undefined;
+    prevArticle.value = undefined;
+    nextArticle.value = undefined;
+    document.documentElement.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+const getList = () => {
+    getArticleByName(route.params.name).then(({ data }) => {
+        article.value = data.data;
+        articleLoaded.value = true;
+        getPageArticle();
+    })
+}
+
+const getPageArticle = () => {
+    getPrevArticle(article.value.id).then(({ data }) => {
+        prevArticle.value = data.data;
+    })
+    getNextArticle(article.value.id).then(({ data }) => {
+        nextArticle.value = data.data;
+    })
+}
 
 </script>
 
@@ -247,19 +284,21 @@ const getArticlePath = computed(() => decodeURIComponent(location.pathname));
         left: 0;
     }
 
-    &>a {
-        padding: 20px 40px;
+    &>a,
+    &>div {
+        padding: 20px 30px;
         display: flex;
         flex-direction: column;
         color: #fff;
         position: relative;
         z-index: 1;
-
-
+        cursor: pointer;
     }
 
     &:nth-child(2) {
-        &>a {
+
+        &>a,
+        &>div {
             text-align: right;
         }
     }
@@ -279,6 +318,6 @@ const getArticlePath = computed(() => decodeURIComponent(location.pathname));
     font-weight: 700;
     margin: 20px 0 15px 0;
     line-height: 1.5;
-    font-size: 22px;
+    font-size: 18px;
 }
 </style>

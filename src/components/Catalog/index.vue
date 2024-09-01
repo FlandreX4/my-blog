@@ -24,6 +24,9 @@ const props = defineProps({
         default: null,
     }
 });
+
+const emit = defineEmits(['callback'])
+
 const titleList = ref<any>([]);
 const currentIndex = ref(0);
 
@@ -51,14 +54,13 @@ const getTitles = () => {
             indent: hTags.indexOf(el.tagName),
         }
     })
+    emit("callback", titleList.value);
 }
 
 // 点击锚点目录
 function handleAnchorClick(anchor: any, idx: number) {
     const heading = props.domRef.$el.querySelector(`[data-v-md-line="${anchor.lineIndex}"]`)
-    // const heading = preview.querySelector(`#${anchor.title}`)
     if (heading) {
-        console.log('offsetTop:', heading, heading.offsetTop, heading.offsetParent.offsetTop)
         window.scrollTo({
             top: heading.offsetTop + heading.offsetParent.offsetTop - 90,
             behavior: 'smooth',

@@ -11,7 +11,7 @@
         </li>
 
         <li>
-          <RouterLink to="/archive">
+          <RouterLink to="/archives">
             <IconArticle />
             <span>文章</span>
           </RouterLink>
@@ -36,31 +36,48 @@
         </li>
       </ul>
     </div>
-    <div class="day-switch switch-sun">
-      <div class="sunMoon"></div>
+    <div class="header-right">
+      <div class="day-switch" :class="{ 'switch-on': isDaySwitch }" @click="daySwitchClick">
+        <IconSun class="switch-sun" />
+        <IconMoon class="switch-moon" />
+      </div>
+      <div class="search">
+        <IconSearch />
+      </div>
     </div>
+
   </div>
+  <n-back-top :show="showBackTop" :right="40" />
 </template>
 
 <script setup lang='ts'>
 import { Home } from '@vicons/ionicons5';
-import { NIcon } from 'naive-ui';
+import { NIcon, NBackTop } from 'naive-ui';
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-gsap.registerPlugin(ScrollTrigger);
-
+import IconSearch from '@/components/icons/IconSearch.vue'
 import { onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import IconArticle from '@/components/icons/IconArticle.vue';
 import IconBook from '@/components/icons/IconBook.vue';
 import IconLink from '@/components/icons/IconLink.vue';
 import IconPaperPlane from '@/components/icons/IconPaperPlane.vue';
+import IconSun from '@/components/icons/IconSun.vue'
+import IconMoon from '@/components/icons/IconMoon.vue'
+
+gsap.registerPlugin(ScrollTrigger);
 
 onMounted(() => {
   GsapTimeline();
 });
 
-let isHeaderBgChange = ref(false);
+const isHeaderBgChange = ref(false);
+const showBackTop = ref(false);
+const isDaySwitch = ref(false);
+
+const daySwitchClick = () => {
+  isDaySwitch.value = !isDaySwitch.value;
+}
 
 const onScrollTriggerUpdate = (self: any) => {
   // console.log("progress", self.progress)
@@ -68,6 +85,12 @@ const onScrollTriggerUpdate = (self: any) => {
     isHeaderBgChange.value = true;
   } else {
     isHeaderBgChange.value = false;
+  }
+
+  if (self.progress >= 1) {
+    showBackTop.value = true;
+  } else {
+    showBackTop.value = false;
   }
 }
 
@@ -180,42 +203,62 @@ const GsapTimeline = () => {
   }
 
   &>li:not(& > li:last-child) {
-    margin-right: 20px;
+    margin-right: 15px;
+  }
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+
+  svg {
+    cursor: pointer;
   }
 }
 
 .day-switch {
-  background: #324164;
-  width: 65px;
-  height: 25px;
-  z-index: 5;
-  border-radius: 25px;
-  box-shadow: 0 15px 10px -10px #0003, 0 5px 10px #0000001a;
-  border: 2px solid #1e2d50;
-  overflow: hidden;
   position: relative;
+  width: 22px;
+  height: 22px;
 
-  .sunMoon {
-    background: #f0e1a5;
-    height: 16px;
-    width: 16px;
-    border-radius: 100%;
-    border: 2px solid #ccc091;
+  svg {
+    width: 100%;
+    height: 100%;
     position: absolute;
-    left: 3px;
-    top: 2.5px;
+    opacity: 0;
+    transition-duration: .3s;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    transition-property: transform, opacity;
   }
 
+  .switch-moon {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+
+  .switch-sun {
+    transform: rotate(45deg);
+  }
 }
 
-.switch-sun {
-  border: 2px solid #52a6bf;
-  background: #5ebedb;
+.switch-on {
+  .switch-moon {
+    opacity: 0;
+    transform: rotate(-45deg);
+  }
 
-  .sunMoon {
-    background: #ffdf61;
-    border: 2px solid #d9b31c;
-    left: calc(100% - 23px);
+  .switch-sun {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+}
+
+.search {
+  margin-left: 13px;
+
+  svg {
+    width: 28px;
+    height: 28px;
   }
 }
 </style>

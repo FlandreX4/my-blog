@@ -3,35 +3,41 @@
         <PageHeader isFullScreen @pageDown="onPageDown">Flandre's Blog</PageHeader>
         <div class="main-container">
             <div class="main-container-left">
-                <div class="article-item" v-for="item in 5" :key="item">
+                <div class="article-item" v-for="(item, index) in articleList" :key="item.id"
+                    :style="`animation-delay: ${index * 0.2}s;`">
                     <div class="article-item-img">
-                        <img src="@\assets\img\104678109_p1.jpg" alt="">
+                        <img v-if="item.thumbnail" :src="getThumbnail(item.thumbnail)" alt="" />
                     </div>
                     <div class="article-info">
                         <div class="article-meta">
                             <span>
                                 <n-icon :component="CalendarOutline" />
-                                2024-07-19
+                                {{ item.createTime && dayjs(item.createTime).format("YYYY-MM-DD") }}
                             </span>
-                            <span>
-                                <n-icon :component="Pricetags" />
-                                服务器部署
+                            <span v-for="tagItem in item.tags" :key="tagItem.id">
+                                <RouterLink :to="tagItem.slug">
+                                    <n-icon :component="Pricetags" />
+                                    {{ tagItem.name }}
+                                </RouterLink>
                             </span>
                         </div>
                         <div class="article-title">
-                            疯狂踩坑，我终于是把nginx+frp疏通了！疯狂踩坑，我终于是把nginx+frp疏通了！
+                            {{ item.title }}
                         </div>
                         <div class="article-content">
-                            前言最近服务器要到期了，又因为配置好点的服务器又太贵了，于是决定自己组一台服务器，然后通过frp做内网穿透但是途中遇见了一系列大坑，现在在这里给大家放出来，做借鉴！注：:::warning本章内容全部
+                            {{ item.summary }}
                         </div>
                         <div class="article-category">
-                            <span>
-                                <n-icon :component="Flag" />
-                                服务器部署
+                            <span v-for="categoryItem in item.categories" :key="categoryItem.id">
+                                <RouterLink :to="categoryItem.slug">
+                                    <n-icon :component="Flag" />
+                                    {{ categoryItem.name }}
+                                </RouterLink>
                             </span>
                         </div>
                     </div>
                 </div>
+                <Pagination :page="dataForm.page + 1" :pages="dataForm.pages" @pageChange="pageChange" />
             </div>
             <div class="main-container-right">
                 <div class="side-container">
@@ -93,25 +99,43 @@ import { CalendarOutline, Pricetags, Flag } from '@vicons/ionicons5';
 import { NIcon } from 'naive-ui';
 import { onMounted, ref } from "vue";
 import PageHeader from '@/components/PageHeader.vue'
+import { getArticleList } from "@/api/article";
+import dayjs from "dayjs";
+import { RouterLink } from 'vue-router';
+import { getThumbnail } from "@/utils/util";
+import Pagination from '@/components/Pagination.vue'
 
-onMounted(() => { });
 
-let tempArr = [
-    {
-        key: 1,
-        name: "flandre"
-    },
-    {
-        key: 2,
-        name: "remi"
-    },
-]
+const dataForm = ref({
+    page: 0,
+    pages: 10,
+    keyword: "",
+    categoryId: undefined,
+})
+const articleList = ref();
 
-let dataList = ref(tempArr);
+onMounted(() => {
+    getList();
+});
 
 const onPageDown = () => {
     let ele = document.querySelector(".page-header");
     document.documentElement.scrollTo({ top: ele?.scrollHeight, behavior: "smooth" });
+}
+
+const getList = () => {
+    getArticleList(dataForm.value).then(({ data }) => {
+        dataForm.value.page = data.data.page;
+        dataForm.value.pages = data.data.pages;
+        articleList.value = data.data.content;
+
+    })
+}
+
+const pageChange = (val: any) => {
+    dataForm.value.page = val - 1;
+    articleList.value = [];
+    getList();
 }
 
 
@@ -146,6 +170,10 @@ const onPageDown = () => {
         box-shadow: 0 10px 30px -15px rgba(0, 0, 0, .1);
         transition: all .2s;
         background-color: #fff;
+        height: 230px;
+        animation: top20 1s;
+        animation-fill-mode: both;
+        opacity: 0;
 
         &:hover {
             box-shadow: 0 0 24px rgba(0, 0, 0, .1);
@@ -186,9 +214,25 @@ const onPageDown = () => {
         width: 50%;
         margin-right: 25px;
         clip-path: polygon(0 0, 92% 0, 100% 100%, 0 100%);
+        position: relative;
+
+        &::before {
+            content: "";
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            animation: gradientBG 15s ease infinite;
+            background-size: 400% 400%;
+            opacity: 0.3;
+            z-index: -1;
+        }
 
         img {
+            width: 100%;
+            height: 100%;
             transition: all 0.2s;
+
         }
     }
 
@@ -202,7 +246,18 @@ const onPageDown = () => {
         display: flex;
         align-items: center;
         justify-content: flex-end;
+        flex-wrap: wrap;
         color: #999;
+
+        &>span {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+
+            i {
+                margin-right: 2px;
+            }
+        }
 
         &>span:not(& > span:first-child) {
             margin-left: 15px;
@@ -237,12 +292,15 @@ const onPageDown = () => {
         bottom: 8px;
         font-size: 13px;
         color: #999;
+
+        &>span:not(&>span:last-child) {
+            margin-right: 10px;
+        }
     }
 }
 
 .main-container-right {
     width: 290px;
-
 }
 
 .side-container {

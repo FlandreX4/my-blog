@@ -5,19 +5,19 @@
                 12月
             </div>
             <div>
-                <RouterLink :to="'/article/文章标题~'" class="timeline-item-container">
+                <RouterLink :to="'/archives/hello-halo'" class="timeline-item-container">
                     <span>03-06</span>
                     <span>[记录] 注册表修改jar文件打开方式</span>
                 </RouterLink>
-                <RouterLink :to="'/article/文章标题~'" class="timeline-item-container">
+                <RouterLink :to="'/archives/hello-halo'" class="timeline-item-container">
                     <span>03-06</span>
                     <span>[记录] 注册表修改jar文件打开方式</span>
                 </RouterLink>
-                <RouterLink :to="'/article/文章标题~'" class="timeline-item-container">
+                <RouterLink :to="'/archives/hello-halo'" class="timeline-item-container">
                     <span>03-06</span>
                     <span>[记录] 注册表修改jar文件打开方式</span>
                 </RouterLink>
-                <RouterLink :to="'/article/文章标题~'" class="timeline-item-container">
+                <RouterLink :to="'/archives/hello-halo'" class="timeline-item-container">
                     <span>03-06</span>
                     <span>[记录] 注册表修改jar文件打开方式</span>
                 </RouterLink>
@@ -29,7 +29,7 @@
                 3月
             </div>
             <div>
-                <RouterLink :to="'/article/文章标题~'" class="timeline-item-container">
+                <RouterLink :to="'/archives/hello-halo'" class="timeline-item-container">
                     <span>03-06</span>
                     <span>[记录] 注册表修改jar文件打开方式</span>
                 </RouterLink>
@@ -40,7 +40,7 @@
                 3月
             </div>
             <div>
-                <RouterLink :to="'/article/文章标题~'" class="timeline-item-container">
+                <RouterLink :to="'/archives/hello-halo'" class="timeline-item-container">
                     <span>03-06</span>
                     <span>[记录] 注册表修改jar文件打开方式</span>
                 </RouterLink>

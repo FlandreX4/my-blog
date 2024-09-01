@@ -1,4 +1,5 @@
 import "./assets/css/base.css";
+import "./assets/css/keyframes.css";
 import "./assets/css/tailwindcss.css";
 
 import { createApp } from "vue";

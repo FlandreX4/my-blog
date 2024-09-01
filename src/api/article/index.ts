@@ -7,7 +7,7 @@ import request from "@/utils/request";
  */
 export function getArticleList(params: any) {
   return request({
-    url: "/article/list",
+    url: "/content/posts",
     method: "get",
     params,
   });
@@ -33,43 +33,29 @@ export function getArticleByName(slug: any) {
     url: `/content/posts/slug`,
     method: "get",
     params: {
-      slug: slug
+      slug: slug,
     },
   });
 }
 
 /**
- * 查看推荐文章
- * @returns 推荐文章
+ * 获取上一篇文章
+ * @param postId 文章Id
  */
-export function getArticleRecommend() {
+export function getPrevArticle(postId: any) {
   return request({
-    url: "/article/recommend",
+    url: `/content/posts/${postId}/prev`,
     method: "get",
   });
 }
 
 /**
- * 搜索文章
- * @returns 文章列表
+ * 获取下一篇文章
+ * @param postId 文章Id
  */
-export function searchArticle(keyword: any) {
+export function getNextArticle(postId: any) {
   return request({
-    url: "/article/search",
+    url: `/content/posts/${postId}/next`,
     method: "get",
-    params: {
-      keyword,
-    },
-  });
-}
-
-/**
- * 点赞文章
- * @param articleId 文章id
- */
-export function likeArticle(articleId: any) {
-  return request({
-    url: `/article/${articleId}/like`,
-    method: "post",
   });
 }
