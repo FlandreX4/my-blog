@@ -14,6 +14,19 @@ export function getArticleList(params: any) {
 }
 
 /**
+ * 根据关键字查询文章列表
+ * @param params 查询条件
+ * @returns 文章列表
+ */
+export function getArticlesByKeyword(params: any) {
+  return request({
+    url: "/content/posts/search",
+    method: "post",
+    params,
+  });
+}
+
+/**
  * 查看文章
  * @param articleId 文章id
  */

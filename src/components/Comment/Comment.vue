@@ -1,7 +1,7 @@
 <template>
     <div class="comment">
         <CommentForm />
-        <div class="comment-header">
+        <div class="comment-header" :class="{ 'mini-header': miniTitle }">
             <IconComment />
             共有{{ pagination.commentCount }}条评论
         </div>
@@ -20,8 +20,8 @@
 </template>
 
 <script setup lang='ts'>
-import { onMounted, provide, ref, watch } from 'vue';
-import { getCommentList } from "@/api/comment";
+import type { PropType } from 'vue'
+import { nextTick, onMounted, provide, ref, watch } from 'vue';
 import IconComment from '@/components/icons/IconComment.vue';
 import CommentForm from '@/components/Comment/CommentForm.vue';
 import CommentItem from './CommentItem.vue';
@@ -30,8 +30,20 @@ import { NPagination } from 'naive-ui';
 
 const props = defineProps({
     postId: Number,
+    miniTitle: Boolean,
+    commentApis: {
+        type: Object as PropType<{
+            getCommentList: Function,
+            addComment: Function
+        }>,
+        default: {
+            getCommentList: undefined,
+            addComment: undefined
+        }
+    }
 });
 
+provide("commentApis", props.commentApis);
 
 const postId = ref();
 const commentList = ref();
@@ -47,9 +59,12 @@ const pagination = ref({
 provide("postId", postId);
 
 watch(() => props.postId, () => {
+    console.log('postId:', props.postId);
     postId.value = props.postId;
-    getList();
-})
+    nextTick(() => {
+        getList();
+    })
+}, { immediate: true })
 
 onMounted(() => {
 
@@ -67,7 +82,7 @@ const replyShowChange = (replyObj: Object) => {
 }
 
 const getList = () => {
-    getCommentList(props.postId, pagination.value.page).then(({ data }) => {
+    props.commentApis.getCommentList(props.postId, pagination.value.page).then(({ data }: any) => {
         commentList.value = data.data.content;
         pagination.value = {
             total: data.data.total,
@@ -95,13 +110,20 @@ const getList = () => {
     margin-bottom: 20px;
     margin-top: 30px;
     font-weight: 600;
+    color: var(--theme-color);
 
     svg {
         width: 20px;
         height: 20px;
-        color: #32325d;
+        color: var(--theme-blue-1);
         margin-right: 10px;
     }
+}
+
+.mini-header {
+    font-size: 16px;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 .horizontal {

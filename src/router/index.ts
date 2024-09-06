@@ -19,9 +19,45 @@ const router = createRouter({
       name: "archivesArticle",
       component: () => import("@/views/Article/index.vue"),
     },
+    {
+      path: "/categories/:name",
+      name: "categories",
+      component: () => import("@/views/Categories/index.vue"),
+    },
+    {
+      path: "/tags/:name",
+      name: "tags",
+      component: () => import("@/views/Tags/index.vue"),
+    },
+    {
+      path: "/search/:name",
+      name: "search",
+      component: () => import("@/views/Search/index.vue"),
+    },
+    {
+      path: "/about",
+      name: "about",
+      component: () => import("@/views/About/index.vue"),
+    },
+    {
+      path: "/journals",
+      name: "journals",
+      component: () => import("@/views/Journals/index.vue"),
+    },
+    {
+      path: "/links",
+      name: "links",
+      component: () => import("@/views/Links/index.vue"),
+    },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return { top: 0 };
+    }
+  },
 });
-
 
 ////页面切换动画？
 // router.beforeEach((to) => {

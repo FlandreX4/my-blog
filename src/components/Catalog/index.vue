@@ -99,6 +99,7 @@ function realFunc() {
     display: flex;
     align-items: center;
     font-size: 16px;
+    color: var(--theme-color-2);
 
     i {
         font-size: 18px;
@@ -123,6 +124,7 @@ function realFunc() {
     overflow: hidden;
     text-overflow: ellipsis;
     border-radius: 3px;
+    color: var(--theme-color-2);
 
     &:hover {
         color: #67709f;

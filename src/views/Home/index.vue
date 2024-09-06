@@ -1,56 +1,29 @@
 <template>
     <div class="home">
-        <PageHeader isFullScreen @pageDown="onPageDown">Flandre's Blog</PageHeader>
+        <PageHeader isFullScreen @pageDown="onPageDown">{{ store.getUserInfo.value?.username }}'s Blog</PageHeader>
         <div class="main-container">
             <div class="main-container-left">
-                <div class="article-item" v-for="(item, index) in articleList" :key="item.id"
-                    :style="`animation-delay: ${index * 0.2}s;`">
-                    <div class="article-item-img">
-                        <img v-if="item.thumbnail" :src="getThumbnail(item.thumbnail)" alt="" />
-                    </div>
-                    <div class="article-info">
-                        <div class="article-meta">
-                            <span>
-                                <n-icon :component="CalendarOutline" />
-                                {{ item.createTime && dayjs(item.createTime).format("YYYY-MM-DD") }}
-                            </span>
-                            <span v-for="tagItem in item.tags" :key="tagItem.id">
-                                <RouterLink :to="tagItem.slug">
-                                    <n-icon :component="Pricetags" />
-                                    {{ tagItem.name }}
-                                </RouterLink>
-                            </span>
-                        </div>
-                        <div class="article-title">
-                            {{ item.title }}
-                        </div>
-                        <div class="article-content">
-                            {{ item.summary }}
-                        </div>
-                        <div class="article-category">
-                            <span v-for="categoryItem in item.categories" :key="categoryItem.id">
-                                <RouterLink :to="categoryItem.slug">
-                                    <n-icon :component="Flag" />
-                                    {{ categoryItem.name }}
-                                </RouterLink>
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                <List :list="articleList" />
                 <Pagination :page="dataForm.page + 1" :pages="dataForm.pages" @pageChange="pageChange" />
             </div>
             <div class="main-container-right">
                 <div class="side-container">
                     <div class="side-card">
                         <div class="author-avatar">
-                            <img src="@\assets\img\1206-baka.jpg" alt="">
+                            <img :src="store.getUserInfo.value?.avatar" alt="">
                         </div>
-                        <div class="author-name">Flandre Nya~</div>
-                        <div class="site-desc">回头亦是绝路</div>
+                        <div class="author-name">{{ store.getUserInfo.value?.nickname }}</div>
+                        <div class="site-desc">{{ store.getUserInfo.value?.description }}</div>
                         <div class="blog-container">
-                            <span>文章</span>
-                            <span>日志</span>
-                            <span>关于页面</span>
+                            <span>
+                                <RouterLink to="/archives">文章</RouterLink>
+                            </span>
+                            <span>
+                                <RouterLink to="/journals">日志</RouterLink>
+                            </span>
+                            <span>
+                                <RouterLink to="/about">关于页面</RouterLink>
+                            </span>
                         </div>
                         <div class="social-container">
                             <a href="" target="_blank">
@@ -95,24 +68,22 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarOutline, Pricetags, Flag } from '@vicons/ionicons5';
-import { NIcon } from 'naive-ui';
 import { onMounted, ref } from "vue";
 import PageHeader from '@/components/PageHeader.vue'
 import { getArticleList } from "@/api/article";
-import dayjs from "dayjs";
 import { RouterLink } from 'vue-router';
-import { getThumbnail } from "@/utils/util";
-import Pagination from '@/components/Pagination.vue'
-
+import Pagination from '@/components/Pagination.vue';
+import { usePageRouterStore } from "@/stores/user";
+import List from '@/components/List.vue';
 
 const dataForm = ref({
     page: 0,
-    pages: 10,
+    pages: 0,
     keyword: "",
     categoryId: undefined,
 })
 const articleList = ref();
+const store = usePageRouterStore();
 
 onMounted(() => {
     getList();
@@ -163,140 +134,7 @@ const pageChange = (val: any) => {
     flex: 1;
     margin-right: 20px;
 
-    .article-item {
-        display: flex;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 10px 30px -15px rgba(0, 0, 0, .1);
-        transition: all .2s;
-        background-color: #fff;
-        height: 230px;
-        animation: top20 1s;
-        animation-fill-mode: both;
-        opacity: 0;
 
-        &:hover {
-            box-shadow: 0 0 24px rgba(0, 0, 0, .1);
-
-            .article-item-img img {
-                transform: scale(1.05) rotate(1deg);
-            }
-        }
-
-        &:not(&:last-child) {
-            margin-bottom: 20px;
-        }
-    }
-
-    .article-item:nth-child(2n) {
-        flex-direction: row-reverse;
-
-        .article-item-img {
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 8% 100%);
-            margin-right: initial;
-            margin-left: 25px;
-        }
-
-        .article-info {
-            padding: 16px 0 48px 25px;
-        }
-
-        .article-meta {
-            justify-content: flex-start;
-        }
-
-        .article-category {
-            justify-content: flex-end;
-        }
-    }
-
-    .article-item-img {
-        width: 50%;
-        margin-right: 25px;
-        clip-path: polygon(0 0, 92% 0, 100% 100%, 0 100%);
-        position: relative;
-
-        &::before {
-            content: "";
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            animation: gradientBG 15s ease infinite;
-            background-size: 400% 400%;
-            opacity: 0.3;
-            z-index: -1;
-        }
-
-        img {
-            width: 100%;
-            height: 100%;
-            transition: all 0.2s;
-
-        }
-    }
-
-    .article-info {
-        padding: 16px 25px 48px 0;
-        width: 50%;
-        position: relative;
-    }
-
-    .article-meta {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        flex-wrap: wrap;
-        color: #999;
-
-        &>span {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-
-            i {
-                margin-right: 2px;
-            }
-        }
-
-        &>span:not(& > span:first-child) {
-            margin-left: 15px;
-        }
-    }
-
-    .article-title {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        margin: .625rem 0;
-        color: #e9546b;
-        overflow: hidden;
-        font-weight: 700;
-        font-size: 18px;
-    }
-
-    .article-content {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 3;
-        line-clamp: 3;
-        max-height: 80px;
-        font-size: 14px;
-        overflow: hidden;
-    }
-
-    .article-category {
-        width: 100%;
-        position: absolute;
-        display: flex;
-        align-items: center;
-        bottom: 8px;
-        font-size: 13px;
-        color: #999;
-
-        &>span:not(&>span:last-child) {
-            margin-right: 10px;
-        }
-    }
 }
 
 .main-container-right {
@@ -308,7 +146,6 @@ const pageChange = (val: any) => {
     top: 90px;
     min-height: 300px;
     z-index: 1;
-    background-color: #fff;
 }
 
 .side-card {
@@ -321,6 +158,8 @@ const pageChange = (val: any) => {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: var(--theme-background);
+    color: var(--theme-text-color);
 
     .author-avatar {
         width: 100px;
@@ -339,10 +178,11 @@ const pageChange = (val: any) => {
     }
 
     .author-name {
+        font-size: 15px;
         margin-top: 15px;
-        font-weight: 400;
+        font-weight: 500;
         text-align: center;
-        color: #333;
+        color: var(--theme-grey-7);
     }
 
     .site-desc {
@@ -359,9 +199,12 @@ const pageChange = (val: any) => {
         text-align: center;
 
         &>span {
-            color: #666;
+            color: var(--theme-grey-7);
             padding: 0 11px;
-            cursor: pointer;
+
+            a {
+                cursor: pointer;
+            }
         }
 
         &>span:not(& > span:first-child) {

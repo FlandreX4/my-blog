@@ -7,7 +7,7 @@
         </div>
         <div class="footer-box">
             <div>
-                <span>This blog has running : 1567 d 9 h 46 m 29 s </span>
+                <span>This blog has running : {{ getRunningTime }} </span>
                 <span class="my-face">ღゝ◡╹)ノ♡</span>
             </div>
             <div>
@@ -19,11 +19,41 @@
 </template>
 
 <script setup lang='ts'>
-import { onMounted } from 'vue';
+import dayjs from "dayjs";
+import duration from 'dayjs/plugin/duration';
+import { getThemeSettings } from "@/api/themes";
+import { computed, onMounted, ref } from 'vue';
+dayjs.extend(duration);
+
+const settings = ref();
+const time = ref();
 
 onMounted(() => {
-
+    getSettings();
 });
+
+const getRunningTime = computed(() => {
+    return time.value && dateFormet(time.value);
+})
+
+const dateFormet = (second: number) => {
+    let d = Math.floor(second / 60 / 60 / 24);
+    let h = Math.floor(second / 60 / 60 % 24);
+    let m = Math.floor(second / 60 % 60);
+    let s = Math.floor(second % 60);
+    // return `${d}天${h}小时${m}分${s}秒`;
+    return `${d} d ${h} h ${m} m ${s} s `;
+}
+
+const getSettings = () => {
+    getThemeSettings().then(({ data }) => {
+        settings.value = data.data;
+        time.value = dayjs().diff(settings.value.TimeStatistics, "second");//获取秒
+        setInterval(() => {
+            time.value += 1;
+        }, 1000);
+    })
+}
 
 </script>
 
@@ -50,6 +80,7 @@ onMounted(() => {
     width: 100%;
     z-index: -1;
     transform: translate3d(0, 0, 0);
+    transition: all 0.3s;
 
     &>div {
         height: 150px;
@@ -77,6 +108,10 @@ onMounted(() => {
         background-size: 2700px 180px;
         top: 12px;
     }
+}
+
+html[theme] .footer-bg {
+    filter: invert(0.8);
 }
 
 .footer-box {

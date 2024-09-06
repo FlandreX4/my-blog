@@ -67,9 +67,17 @@ function particlesMousemove(e: MouseEvent) {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    opacity: 0.6;
+    // opacity: 0.6;
     z-index: -2;
     pointer-events: none;
+    background-color: var(--theme-background);
+    transition: all 0.3s;
+    // &::before {
+    //     content: "";
+    //     position: absolute;
+    //     width: 100%;
+    //     height: 100%;
+    // }
 }
 
 .particles-layer {
@@ -80,8 +88,12 @@ function particlesMousemove(e: MouseEvent) {
     height: 110%;
     background-repeat: repeat;
     background-position: 50%;
-    opacity: 0.07;
+    opacity: 0.04;
     display: block;
+}
+
+html[theme] .particles-layer {
+    opacity: 0.07;
 }
 
 .particles-layer-1 {

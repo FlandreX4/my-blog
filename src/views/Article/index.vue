@@ -56,13 +56,13 @@
                         </div>
                     </div>
                 </div>
-                <Comment :postId="article?.id" />
+                <Comment :postId="article?.id" :commentApis="{ addComment, getCommentList }" />
             </div>
         </Card>
         <div class="sidebar" v-if="articleLoaded && isShowCatalog">
-            <div class="sidebar-container">
+            <Card class="sidebar-container">
                 <Catalog :domRef="articleRef" @callback="(list) => isShowCatalog = list.length > 0" />
-            </div>
+            </Card>
         </div>
     </div>
 </template>
@@ -75,7 +75,8 @@ import { getArticleByName, getPrevArticle, getNextArticle } from "@/api/article"
 import Catalog from '@/components/Catalog/index.vue'
 import { NIcon } from 'naive-ui';
 import { Link, ShareSocial, PricetagsSharp } from '@vicons/ionicons5';
-import Comment from '@/components/Comment/Comment.vue'
+import Comment from '@/components/Comment/Comment.vue';
+import { addComment, getCommentList } from "@/api/comment";
 import { RouterLink, useRoute } from 'vue-router';
 import { parseColorString } from "@/utils/colorConversion";
 import { getThumbnail } from "@/utils/util";
@@ -153,13 +154,9 @@ const getPageArticle = () => {
 .sidebar-container {
     padding: 16px;
     border-radius: 8px;
-    box-shadow: 0 0 16px rgba(0, 0, 0, .1);
-    transition: all .2s ease-in-out 0s;
     position: sticky;
     top: 90px;
     margin-left: 13px;
-    animation: slideUpIn 1s;
-    background-color: white;
 }
 
 .article-post {
@@ -172,8 +169,8 @@ const getPageArticle = () => {
     padding: 16px 32px;
     margin-bottom: 30px;
     border-radius: 10px;
-    background: #f7f7f7;
-    color: #666;
+    background: var(--theme-grey-2);
+    color: var(--theme-grey-6);
 
     li {
         display: flex;

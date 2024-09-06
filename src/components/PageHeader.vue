@@ -4,7 +4,7 @@
         <div class="page-header-main">
             <div class="page-header-main-title md:text-4xl lg:text-4xl xl:text-5xl"
                 :style="`transform: translate3d(0, ${offsetY}px, 0)`">
-                <slot>Flandre's Blog</slot>
+                <slot>{{ store.getUserInfo.value?.username }}'s Blog</slot>
             </div>
             <div class="page-down" @click="$emit('pageDown', true)">
                 <n-icon class="animate-bounce" size="40" :component="ChevronDownOutline" />
@@ -20,6 +20,7 @@ import { NIcon } from 'naive-ui';
 import { computed, onMounted } from 'vue';
 import WaveEffect from './WaveEffect.vue';
 import { useScroll } from '@vueuse/core'
+import { usePageRouterStore } from "@/stores/user";
 
 const props = defineProps({
     isFullScreen: Boolean, //是否高度铺满
@@ -30,6 +31,7 @@ const emit = defineEmits(["pageDown"]);
 
 const { y } = useScroll(window);
 let pageHeaderDom: any = undefined;
+const store = usePageRouterStore();
 
 onMounted(() => {
     pageHeaderDom = document.querySelector(".page-header");
@@ -76,9 +78,9 @@ const pageDownClick = () => {
     height: 70vh;
     position: relative;
     background-color: #111827;
-    
+
     // animation: fade-down .3s;
-    
+
     // background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
     // animation: gradientBG 15s ease infinite;
     // background-size: 400% 400%;
@@ -95,13 +97,14 @@ const pageDownClick = () => {
 
     .page-down {
         position: absolute;
-        bottom: 60px;
+        bottom: 70px;
         left: 50%;
         transform: translate(-50%, 0);
         cursor: pointer;
         user-select: none;
         z-index: 1;
         display: none;
+        color: var(--theme-svg-color-0);
     }
 }
 

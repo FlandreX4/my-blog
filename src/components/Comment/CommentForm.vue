@@ -53,7 +53,8 @@
                     <template #trigger>
                         <IconEmojiSmile />
                     </template>
-                    <EmojiPicker :native="true" @select="onSelectEmoji" hide-group-names />
+                    <EmojiPicker :native="true" @select="onSelectEmoji" hide-group-names
+                        :theme="getTheme() ? 'dark' : 'light'" />
                 </n-popover>
             </div>
             <!-- <div class="action-btn" @click="onSubmit">
@@ -65,7 +66,6 @@
 </template>
 
 <script setup lang='ts'>
-import { addComment } from "@/api/comment";
 import { NButton, NCollapseTransition, NInput, NPopover, useMessage } from 'naive-ui';
 import IconUser from '@/components/icons/IconUser.vue';
 import IconEmail from '@/components/icons/IconEmail.vue';
@@ -84,6 +84,7 @@ const props = defineProps({
     },
 });
 
+const commentApis: any = inject("commentApis");
 const postId: any = inject("postId");
 
 const message = useMessage();
@@ -100,6 +101,8 @@ const dataForm = ref({
     parentId: 0,
     postId: 0,
 });
+
+const getTheme = () => document.documentElement.getAttribute("theme");
 
 onMounted(() => {
     dataForm.value.author = localStorage.getItem("comment-author") || "";
@@ -168,7 +171,7 @@ const onSubmit = () => {
         dataForm.value.postId = postId;
         dataForm.value.parentId = props.parentComment ? props.parentComment.id : 0;
         isLoading.value = true;
-        addComment(dataForm.value).then(({ data }) => {
+        commentApis.addComment(dataForm.value).then(({ data }: any) => {
             isLoading.value = false;
             if (data.status == 200) {
                 message.success("您的评论已经投递至博主，等待博主审核！", {
@@ -180,7 +183,7 @@ const onSubmit = () => {
                 localStorage.setItem("comment-email", dataForm.value.email);
                 reset();
             }
-        }).catch(({ response }) => {
+        }).catch(({ response }: any) => {
             isLoading.value = false;
             let msg = response.data.data == Object ? response.data.data.authorUrl : response.data.message;
             message.error(msg, {
@@ -205,7 +208,7 @@ const reset = () => {
         display: flex;
         justify-content: center;
         align-items: center;
-        color: #344767;
+        color: var(--theme-blue-1);
         font-size: 17px;
         margin-bottom: 10px;
 
@@ -238,7 +241,7 @@ const reset = () => {
         line-height: 1.571;
         font-weight: 600;
         font-size: .875rem;
-        color: #3a416f;
+        color: var(--theme-blue-1);
     }
 
     .comment-user-switch {
@@ -248,7 +251,7 @@ const reset = () => {
         transition: all 0.2s;
 
         &:hover {
-            color: #67709f;
+            color: var(--theme-blue-1);
         }
     }
 
@@ -291,31 +294,17 @@ const reset = () => {
     .action-emoji {
         width: 25px;
         height: 25px;
-        color: #484b53;
+        color: var(--theme-text-color);
         margin-right: 10px;
         cursor: pointer;
     }
 
     .action-btn {
         font-size: 12px;
-        // color: #6886b8;
-        // border: 1px solid #344767;
         border-radius: 7px;
         padding: 7px 20px;
         cursor: pointer;
         user-select: none;
-        // transition: all 0.2s;
-
-        // :deep(.n-button__state-border) {
-        //     border-color: #344767;
-        // }
-
-        // &:hover {
-        //     color: #a7b5fd;
-        // }
-        // &:focus {
-        //     color: #67709f;
-        // }
     }
 }
 

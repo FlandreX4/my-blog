@@ -1,7 +1,7 @@
 <template>
   <div class="header" :class="{ 'header-bg-change': isHeaderBgChange }">
     <div class="header-left">
-      <div class="header-logo">Flandre</div>
+      <div class="header-logo">{{ store.getUserInfo.value?.username }}</div>
       <ul class="header-menu">
         <li>
           <RouterLink to="/">
@@ -17,19 +17,19 @@
           </RouterLink>
         </li>
         <li>
-          <RouterLink to="/">
+          <RouterLink to="/journals">
             <IconBook />
             <span>日志页面</span>
           </RouterLink>
         </li>
-        <li>
-          <RouterLink to="/">
+        <!-- <li>
+          <RouterLink to="/links">
             <IconLink />
             <span>友链</span>
           </RouterLink>
-        </li>
+        </li> -->
         <li>
-          <RouterLink to="/">
+          <RouterLink to="/about">
             <IconPaperPlane />
             <span>关于页面</span>
           </RouterLink>
@@ -37,16 +37,14 @@
       </ul>
     </div>
     <div class="header-right">
-      <div class="day-switch" :class="{ 'switch-on': isDaySwitch }" @click="daySwitchClick">
-        <IconSun class="switch-sun" />
-        <IconMoon class="switch-moon" />
-      </div>
+      <DaySwitch @change="switchChange" />
       <div class="search">
-        <IconSearch />
+        <IconSearch @click="() => searchVisible = !searchVisible" />
       </div>
     </div>
 
   </div>
+  <Search v-model="searchVisible" />
   <n-back-top :show="showBackTop" :right="40" />
 </template>
 
@@ -56,28 +54,30 @@ import { NIcon, NBackTop } from 'naive-ui';
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import IconSearch from '@/components/icons/IconSearch.vue'
-import { onMounted, ref } from 'vue';
+import { nextTick, onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
+import { usePageRouterStore } from "@/stores/user";
 import IconArticle from '@/components/icons/IconArticle.vue';
 import IconBook from '@/components/icons/IconBook.vue';
 import IconLink from '@/components/icons/IconLink.vue';
 import IconPaperPlane from '@/components/icons/IconPaperPlane.vue';
-import IconSun from '@/components/icons/IconSun.vue'
-import IconMoon from '@/components/icons/IconMoon.vue'
+
+import { getUserInfo } from "@/api/user";
+import Search from '@/components/Search.vue'
+import DaySwitch from '../../DaySwitch.vue'
 
 gsap.registerPlugin(ScrollTrigger);
 
 onMounted(() => {
+  getUser();
   GsapTimeline();
 });
 
+let t1: any = undefined;
 const isHeaderBgChange = ref(false);
 const showBackTop = ref(false);
-const isDaySwitch = ref(false);
-
-const daySwitchClick = () => {
-  isDaySwitch.value = !isDaySwitch.value;
-}
+const searchVisible = ref(false);
+const store = usePageRouterStore();
 
 const onScrollTriggerUpdate = (self: any) => {
   // console.log("progress", self.progress)
@@ -94,8 +94,31 @@ const onScrollTriggerUpdate = (self: any) => {
   }
 }
 
+const getUser = () => {
+  getUserInfo().then(({ data }) => {
+    store.setUserInfo(data.data);
+  })
+}
+
+const getTheme = () => document.documentElement.getAttribute("theme");
+
+const getEleAttribute = (cssName: string) => getComputedStyle(document.documentElement).getPropertyValue(cssName);
+
+const switchChange = () => {
+  gsapInit();
+}
+
+const gsapInit = () => {
+  t1.kill();
+  let dom: any = document.querySelector(".header");
+  dom.style.cssText = "";
+  nextTick(() => {
+    GsapTimeline();
+  })
+}
+
 const GsapTimeline = () => {
-  let t1 = gsap.timeline({
+  t1 = gsap.timeline({
     scrollTrigger: {
       // trigger: ".home",
       // pin: true, // 在执行时固定触发器元素
@@ -106,18 +129,21 @@ const GsapTimeline = () => {
       onUpdate: onScrollTriggerUpdate,
     },
   });
+  console.log('进入:', t1, getEleAttribute("--theme-background-a7"));
+
 
   t1.to(
     ".header",
     {
-      backgroundColor: "rgba(255, 255, 255, 0.8)",
-      boxShadow: "inset 0 0 2px #c5c5c5d1",
+      // backgroundColor: "rgba(255, 255, 255, 0.8)",
+      backgroundColor: getEleAttribute("--theme-background-a7"),
+      boxShadow: getTheme() ? "inset 0 0 2px rgba(197, 197, 197, 0.18)" : "inset 0 0 2px rgba(197, 197, 197, 0.82)",
     }
   );
   t1.to(
     ".header",
     {
-      color: "#333",
+      color: getTheme() ? getEleAttribute("--theme-grey-0") : "#333",
     },
     "-=50%"
   );
@@ -143,7 +169,8 @@ const GsapTimeline = () => {
   height: 75px;
   padding: 8px 20%;
   z-index: 10;
-  color: white;
+  color: var(--theme-grey-0);
+  // transition: all 0.3s;
 
   // box-shadow: inset 0 0 2px #c5c5c5d1;
   // -webkit-backdrop-filter: saturate(200%) blur(30px);
@@ -216,49 +243,12 @@ const GsapTimeline = () => {
   }
 }
 
-.day-switch {
-  position: relative;
-  width: 22px;
-  height: 22px;
-
-  svg {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    opacity: 0;
-    transition-duration: .3s;
-    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
-    transition-property: transform, opacity;
-  }
-
-  .switch-moon {
-    opacity: 1;
-    transform: rotate(0deg);
-  }
-
-  .switch-sun {
-    transform: rotate(45deg);
-  }
-}
-
-.switch-on {
-  .switch-moon {
-    opacity: 0;
-    transform: rotate(-45deg);
-  }
-
-  .switch-sun {
-    opacity: 1;
-    transform: rotate(0deg);
-  }
-}
-
 .search {
   margin-left: 13px;
 
   svg {
-    width: 28px;
-    height: 28px;
+    width: 23px;
+    height: 23px;
   }
 }
 </style>

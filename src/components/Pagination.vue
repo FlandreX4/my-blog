@@ -1,7 +1,7 @@
 <template>
-    <slot />
-    <div class="pagination">
-        <nav v-show="props.pages > 1" class="pagination-btn" @click="pageChange(props.page - 1)">
+    <!-- <slot /> -->
+    <div class="pagination" v-if="props.pages > 1">
+        <nav v-show="props.page > 1" class="pagination-btn" @click="pageChange(props.page - 1)">
             <span>
                 <IconRight3 />
                 上一页
@@ -50,8 +50,8 @@ const pageChange = (val: any) => {
             align-items: center;
             background-size: 250%;
             transition: all .4s;
-            background-image: linear-gradient(130deg, transparent 50%, #f1404b 50%);
-            color: #333333;
+            background-image: linear-gradient(130deg, transparent 50%, #777aaf 50%);
+            color: var(--theme-color-2);
             border-radius: 4px;
             cursor: pointer;
         }
@@ -61,6 +61,8 @@ const pageChange = (val: any) => {
             height: 16px;
             margin-left: 2px;
             color: #fff;
+            opacity: 0;
+            transition: all 0.2s;
         }
 
         &:hover {
@@ -69,12 +71,17 @@ const pageChange = (val: any) => {
                 color: #fff;
                 transform: translate(16px);
             }
+
+            svg {
+                opacity: 1;
+            }
         }
     }
 
     .pagination-btn:nth-child(1) {
         &>span {
-            background-image: linear-gradient(220deg, transparent 50%, #f1404b 50%);
+            // background-image: linear-gradient(220deg, transparent 50%, #f1404b 50%);
+            background-image: linear-gradient(220deg, transparent 50%, #777aaf 50%);
             background-position: 100%;
         }
 

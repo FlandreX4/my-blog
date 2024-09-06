@@ -77,8 +77,13 @@ const onReplyClick = (obj: any) => {
     box-sizing: border-box;
     min-width: 200px;
     max-width: 100%;
-    // margin: 0 auto;
-    // padding: 45px;
+    background-color: var(--theme-background);
+    color: var(--theme-color);
+
+    :deep(pre) {
+        background-color: var(--theme-pre-background-color);
+        color: var(--theme-pre-color);
+    }
 }
 
 .comment-main {
@@ -103,7 +108,8 @@ const onReplyClick = (obj: any) => {
 
     .comment-main-header {
         display: flex;
-        color: #667c99;
+        // color: #667c99;
+        color: var(--theme-blue-1);
         font-size: 12px;
         line-height: 18px;
         align-items: center;
@@ -121,7 +127,7 @@ const onReplyClick = (obj: any) => {
 
     .header-author {
         padding-right: 8px;
-        color: #333;
+        color: var(--theme-color);
         font-size: 14px;
         font-weight: 600;
     }
@@ -130,7 +136,7 @@ const onReplyClick = (obj: any) => {
         padding: 2px 5px;
         margin-right: 8px;
         color: #2643e9;
-        background-color: rgba(203, 210, 246, .5);
+        background-color: var(--theme-background-2-a5);
         font-size: 12px;
         font-weight: 600;
         border-radius: 4px;

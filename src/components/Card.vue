@@ -13,8 +13,8 @@
     margin: 0 auto;
     padding: 28px 36px;
     border-radius: 12px;
-    box-shadow: 0 0 16px rgba(0, 0, 0, .1);
+    box-shadow: 0 0 16px var(--theme-shadow-color);
     animation: slideUpIn 1s;
-    background-color: #fff;
+    background-color: var(--theme-background);
 }
 </style>
