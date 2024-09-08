@@ -1,6 +1,7 @@
 <template>
     <PageHeader>文章归档</PageHeader>
     <div class="archive">
+        <DynamicBackground />
         <Card class="custom-card">
             <div class="archive-container">
                 <div class="article-timeline" v-for="item in archiveList" :key="item.year">
@@ -63,5 +64,20 @@ const archiveList = ref();
     font-weight: 800;
     color: var(--theme-color);
     line-height: 60px;
+}
+
+.custom-card {
+    max-width: 968px;
+    width: calc(100% - 20px);
+}
+
+@media (max-width: 767px) {
+    .archive-container {
+        margin-left: 0;
+    }
+
+    .custom-card {
+        padding: 16px 14px;
+    }
 }
 </style>

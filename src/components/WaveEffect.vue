@@ -36,7 +36,7 @@
 .waves {
     position: absolute;
     left: 0;
-    bottom: 0;
+    bottom: -1px;
     width: 100%;
     height: 12vh;
     min-height: 100px;
@@ -70,5 +70,12 @@
     animation-delay: -5s;
     animation-duration: 16s;
     color: var(--theme-background);
+}
+
+@media (max-width: 767px) {
+    .waves {
+        height: 10vh;
+        min-height: 10vh;
+    }
 }
 </style>

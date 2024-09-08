@@ -65,17 +65,7 @@ const pageChange = (val: any) => {
             transition: all 0.2s;
         }
 
-        &:hover {
-            &>span {
-                background-position: 100%;
-                color: #fff;
-                transform: translate(16px);
-            }
 
-            svg {
-                opacity: 1;
-            }
-        }
     }
 
     .pagination-btn:nth-child(1) {
@@ -91,16 +81,37 @@ const pageChange = (val: any) => {
             margin-right: 2px;
         }
 
-        &:hover {
-            &>span {
-                background-position: 0;
-                transform: translate(-16px);
-            }
-        }
     }
 
     .pagination-btn:not(.pagination-btn:last-child) {
         margin-right: 10px;
+    }
+}
+
+@media (any-hover: hover) {
+    .pagination {
+        .pagination-btn {
+            &:hover {
+                &>span {
+                    background-position: 100%;
+                    color: #fff;
+                    transform: translate(16px);
+                }
+
+                svg {
+                    opacity: 1;
+                }
+            }
+        }
+
+        .pagination-btn:nth-child(1) {
+            &:hover {
+                &>span {
+                    background-position: 0;
+                    transform: translate(-16px);
+                }
+            }
+        }
     }
 }
 </style>

@@ -36,16 +36,13 @@
   background: #a7b5fd;
 }
 
-@media (min-width: 1200px) {
-  .custom-card {
-    width: 968px;
+@media (max-width: 419px) {
+  .vuepress-markdown-body div {
+    margin: 0 !important;
+    border-radius: 6px !important;
   }
-}
-
-@media (max-width: 767px) {
-  .custom-card {
-    width: calc(100% - 10px);
-    padding: 16px 14px;
+  .v3-emoji-picker {
+    max-width: 250px;
   }
 }
 
@@ -75,7 +72,6 @@
   --n-button-border-hover: 1px solid var(--theme-border-color-3) !important;
   --n-item-color-disabled: var(--theme-disabled-background) !important;
   --n-item-border-disabled: 1px solid var(--theme-border-color-3) !important;
-  /* 1px solid rgb(125 125 125)#67709f */
 }
 
 .n-button {
@@ -90,6 +86,9 @@
 }
 
 .n-back-top {
+  --n-width: 40px;
+  --n-height: 40px;
+  --n-text-color: var(--theme-color-2) !important;
   --n-icon-color-hover: #a7b5fd !important;
   --n-icon-color-pressed: #a7b5fd !important;
   --n-icon-color: var(--theme-blue-7) !important;
@@ -97,6 +96,11 @@
   --n-box-shadow: 0 2px 8px 0px var(--theme-shadow-color-2-a12) !important;
   --n-box-shadow-hover: 0 2px 12px 0px var(--theme-shadow-color-2-a12) !important;
   --n-box-shadow-pressed: 0 2px 12px 0px var(--theme-shadow-color-2-a12) !important;
+  z-index: 10;
+}
+
+.n-back-top .n-base-icon {
+  font-size: 22px;
 }
 
 .n-popover {

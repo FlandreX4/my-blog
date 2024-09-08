@@ -7,11 +7,12 @@
         </div>
         <div class="footer-box">
             <div>
-                <span>This blog has running : {{ getRunningTime }} </span>
-                <span class="my-face">ღゝ◡╹)ノ♡</span>
+                <span>This blog has running : {{ getRunningTime }} <span class="my-face">ღゝ◡╹)ノ♡</span></span>
+
             </div>
             <div>
-                <a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">湘ICP备2021006182号-1 </a>
+                <a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">{{
+                    store.getThemeSettings.value?.Icp }}</a>
             </div>
             <div>Copyright © 2024 Flandre Nya~ Powered by Vue</div>
         </div>
@@ -21,15 +22,24 @@
 <script setup lang='ts'>
 import dayjs from "dayjs";
 import duration from 'dayjs/plugin/duration';
-import { getThemeSettings } from "@/api/themes";
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useThemeSettingsStore } from "@/stores/themeSettings";
 dayjs.extend(duration);
 
-const settings = ref();
 const time = ref();
+const store = useThemeSettingsStore();
+
+watch(() => store.getThemeSettings.value, () => {
+    if (store.getThemeSettings.value?.TimeStatistics) {
+        time.value = dayjs().diff(store.getThemeSettings.value?.TimeStatistics, "second");//获取秒
+        setInterval(() => {
+            time.value += 1;
+        }, 1000);
+    }
+
+})
 
 onMounted(() => {
-    getSettings();
 });
 
 const getRunningTime = computed(() => {
@@ -45,15 +55,6 @@ const dateFormet = (second: number) => {
     return `${d} d ${h} h ${m} m ${s} s `;
 }
 
-const getSettings = () => {
-    getThemeSettings().then(({ data }) => {
-        settings.value = data.data;
-        time.value = dayjs().diff(settings.value.TimeStatistics, "second");//获取秒
-        setInterval(() => {
-            time.value += 1;
-        }, 1000);
-    })
-}
 
 </script>
 
@@ -62,14 +63,15 @@ const getSettings = () => {
 
 .footer {
     min-height: 100px;
-    margin: 20vh 0 0 0;
     left: 0;
     right: 0;
-    padding: 15px 0;
+    padding: 180px 0 15px 0;
     color: #888;
     line-height: 1.5;
     position: absolute;
     font-size: 12px;
+    background-color: var(--theme-background);
+    transition: all 0.3s;
 }
 
 .footer-bg {
@@ -78,7 +80,7 @@ const getSettings = () => {
     height: 180px;
     position: absolute;
     width: 100%;
-    z-index: -1;
+    // z-index: -1;
     transform: translate3d(0, 0, 0);
     transition: all 0.3s;
 
@@ -115,7 +117,7 @@ html[theme] .footer-bg {
 }
 
 .footer-box {
-    width: 70%;
+    width: 95%;
     max-width: 900px;
     text-align: center;
     margin: 0 auto;

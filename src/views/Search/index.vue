@@ -1,18 +1,21 @@
 <template>
     <PageHeader>{{ `关于 [${dataForm.keyword}] 的搜索结果` }}</PageHeader>
     <div class="search">
-        <div class="search-input">
-            <el-input v-model="searchVal" placeholder="Search" @keyup.enter="onSearch">
-                <template #prefix>
-                    <IconSearch @click="onSearch" />
-                </template>
-            </el-input>
+        <DynamicBackground />
+        <div class="search-container">
+            <div class="search-input">
+                <el-input v-model="searchVal" placeholder="Search" @keyup.enter="onSearch">
+                    <template #prefix>
+                        <IconSearch @click="onSearch" />
+                    </template>
+                </el-input>
+            </div>
+            <template v-if="list && list.length > 1">
+                <List :list="list" />
+                <Pagination :page="dataForm.page + 1" :pages="dataForm.pages" @pageChange="pageChange" />
+            </template>
+            <h1 class="empty" v-else>Sorry! Nothing Found...</h1>
         </div>
-        <template v-if="list && list.length > 1">
-            <List :list="list" />
-            <Pagination :page="dataForm.page + 1" :pages="dataForm.pages" @pageChange="pageChange" />
-        </template>
-        <h1 class="empty" v-else>Sorry! Nothing Found...</h1>
     </div>
 </template>
 
@@ -84,8 +87,14 @@ const pageChange = (val: any) => {
 
 <style lang='less' scoped>
 .search {
-    width: 970px;
-    margin: 100px auto;
+    position: relative;
+}
+
+.search-container {
+    max-width: 970px;
+    width: calc(100% - 20px);
+    margin: 0 auto;
+    padding: 100px 0;
 }
 
 .search-input {
@@ -93,6 +102,7 @@ const pageChange = (val: any) => {
 
     :deep(.el-input) {
         font-size: 18px;
+        --el-input-bg-color: var(--theme-background);
 
         svg {
             width: 24px;
@@ -103,7 +113,7 @@ const pageChange = (val: any) => {
         .el-input__wrapper {
             box-shadow: none;
             height: 60px;
-            border: 1px solid #f3f4f6;
+            border: 1px solid var(--theme-border-color-3);
             border-radius: 30px;
             padding: 1px 20px;
         }
@@ -112,7 +122,7 @@ const pageChange = (val: any) => {
 }
 
 .empty {
-    color: #1f2937;
+    color: var(--theme-text-color-2);
     font-weight: 800;
     font-size: 25px;
     margin: 50px 0;

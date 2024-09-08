@@ -62,6 +62,8 @@ const bgUrl = computed(() => {
 
 .detail-container {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   font-size: 15px;
   margin-top: 30px;
 

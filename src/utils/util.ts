@@ -64,3 +64,18 @@ export function getThumbnail(thumbnail: string) {
   if (!thumbnail) return;
   return isUrl(thumbnail) ? thumbnail : serveBaseUrl + thumbnail;
 }
+
+/**
+ * 获取元素距离顶部的offstTop
+ * @param dom //元素
+ * @param count //初始值
+ * @param rootTagName //根节点名
+ * @returns { number }
+ */
+export function getOffsetTop(dom: any, count: any = 0, rootTagName: any = "BODY"): number {
+  if (dom && dom?.tagName != rootTagName) {
+    return getOffsetTop(dom.offsetParent, dom.offsetTop + count);
+  } else {
+    return count;
+  }
+}

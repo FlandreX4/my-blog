@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog class="search" v-model="searchVisible" width="40%" :show-close="false" :lock-scroll="false">
+    <el-dialog class="search" v-model="searchVisible" :show-close="false" :lock-scroll="false">
       <el-input v-model="input" placeholder="Search" @keyup.enter="onSearch">
         <template #prefix>
           <IconSearch />
@@ -19,7 +19,7 @@ import IconExit from './icons/IconExit.vue'
 import IconSearch from './icons/IconSearch.vue'
 import { useRouter } from 'vue-router';
 
-
+const emit = defineEmits(["searchDone"])
 const searchVisible = defineModel();
 const router = useRouter();
 const input = ref('');
@@ -29,14 +29,20 @@ onMounted(() => {
 });
 
 const onSearch = () => {
-  if (input.value)
+  if (input.value) {
     router.push(`/search/${input.value}`);
+    emit("searchDone", false);
+    input.value = "";
+  }
 }
 
 </script>
 
 <style lang='less' scoped>
 :deep(.search) {
+  max-width: 670px;
+  width: 80%;
+
   .el-dialog__header {
     padding-bottom: 0;
   }

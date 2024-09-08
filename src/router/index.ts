@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-// import { usePageRouterStore } from "@/stores/pageRouter";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,11 +43,11 @@ const router = createRouter({
       name: "journals",
       component: () => import("@/views/Journals/index.vue"),
     },
-    {
-      path: "/links",
-      name: "links",
-      component: () => import("@/views/Links/index.vue"),
-    },
+    // {
+    //   path: "/links",
+    //   name: "links",
+    //   component: () => import("@/views/Links/index.vue"),
+    // },
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
@@ -61,7 +60,7 @@ const router = createRouter({
 
 ////页面切换动画？
 // router.beforeEach((to) => {
-//   const store = usePageRouterStore();
+// //  const store = usePageRouterStore();
 //   store.pageLoad();
 //   // console.log("进入:", to, store.showPage, store);
 
@@ -69,7 +68,7 @@ const router = createRouter({
 // });
 
 // router.afterEach((to) => {
-//   const store = usePageRouterStore();
+// //  const store = usePageRouterStore();
 //   store.pageLoaded();
 //   // console.log("成功:", to, store.showPage, store);
 // });

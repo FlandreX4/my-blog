@@ -1,8 +1,11 @@
 <template>
     <PageHeader>{{ category }}</PageHeader>
     <div class="categories">
-        <List :list="list" />
-        <Pagination :page="dataForm.page + 1" :pages="dataForm.pages" @pageChange="pageChange" />
+        <DynamicBackground />
+        <div class="categories-container">
+            <List :list="list" />
+            <Pagination :page="dataForm.page + 1" :pages="dataForm.pages" @pageChange="pageChange" />
+        </div>
     </div>
 </template>
 
@@ -61,7 +64,13 @@ const pageChange = (val: any) => {
 
 <style lang='less' scoped>
 .categories {
-    width: 970px;
-    margin: 100px auto;
+    position: relative;
+
+    .categories-container {
+        max-width: 970px;
+        width: calc(100% - 20px);
+        margin: 0 auto;
+        padding: 100px 0;
+    }
 }
 </style>

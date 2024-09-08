@@ -1,34 +1,37 @@
 <template>
   <PageHeader>日志</PageHeader>
   <div class="journals">
-    <div class="journals-card" v-for="(item, index) in journalList" :key="item.id">
-      <div class="card-header">
-        <div class="card-header-img">
-          <img :src="store.getUserInfo.value?.avatar" alt="">
+    <DynamicBackground />
+    <div class="journals-container">
+      <div class="journals-card" v-for="(item, index) in journalList" :key="item.id">
+        <div class="card-header">
+          <div class="card-header-img">
+            <img :src="store.getUserInfo.value?.avatar" alt="">
+          </div>
+          <div>
+            <div class="card-header-name">
+              <span>{{ store.getUserInfo.value?.nickname }}</span>
+              <IconAccount />
+            </div>
+            <div class="card-header-time">{{ timeAgo(item.createTime) }}</div>
+          </div>
+        </div>
+        <v-md-preview class="preview" ref="articleRef" :text="item?.sourceContent"></v-md-preview>
+        <hr class="post-line" />
+        <div class="journals-action">
+          <span>
+            <IconMessage @click="commentClick(index)" />
+            <span>{{ item.commentCount }}</span>
+          </span>
         </div>
         <div>
-          <div class="card-header-name">
-            <span>{{ store.getUserInfo.value?.nickname }}</span>
-            <IconAccount />
-          </div>
-          <div class="card-header-time">{{ timeAgo(item.createTime) }}</div>
+          <n-collapse-transition :show="commentShowIndex == index" appear>
+            <Comment :postId="item.id" miniTitle :commentApis="{ addComment, getCommentList }" />
+          </n-collapse-transition>
         </div>
       </div>
-      <v-md-preview class="preview" ref="articleRef" :text="item?.sourceContent"></v-md-preview>
-      <hr class="post-line" />
-      <div class="journals-action">
-        <span>
-          <IconMessage @click="commentClick(index)" />
-          <span>{{ item.commentCount }}</span>
-        </span>
-      </div>
-      <div class="journals-comment">
-        <n-collapse-transition :show="commentShowIndex == index" appear>
-          <Comment :postId="item.id" miniTitle :commentApis="{ addComment, getCommentList }" />
-        </n-collapse-transition>
-      </div>
+      <Pagination :page="dataForm.page + 1" :pages="dataForm.pages" @pageChange="pageChange" />
     </div>
-    <Pagination :page="dataForm.page + 1" :pages="dataForm.pages" @pageChange="pageChange" />
   </div>
 </template>
 
@@ -41,7 +44,7 @@ import Comment from '@/components/Comment/Comment.vue';
 import { onMounted, ref } from 'vue';
 import { NCollapseTransition } from 'naive-ui';
 import { getJournals, getCommentList, addComment } from "@/api/journals";
-import { usePageRouterStore } from "@/stores/user";
+import { useUserStore } from "@/stores/user";
 import { timeAgo } from "@/utils/util";
 
 const dataForm = ref({
@@ -50,7 +53,7 @@ const dataForm = ref({
   size: 5
 })
 const journalList = ref();
-const store = usePageRouterStore();
+const store = useUserStore();
 const commentShowIndex = ref();
 
 onMounted(() => {
@@ -83,7 +86,13 @@ const commentClick = (index: any) => {
 
 <style lang='less' scoped>
 .journals {
-  width: 900px;
+  position: relative;
+  overflow: hidden;
+}
+
+.journals-container {
+  width: 100%;
+  max-width: 900px;
   margin: 55px auto 0 auto;
   padding: 0 35px;
 }
@@ -170,5 +179,4 @@ const commentClick = (index: any) => {
     }
   }
 }
-
-// .journals-comment {}</style>
+</style>

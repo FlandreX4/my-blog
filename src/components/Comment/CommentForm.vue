@@ -7,7 +7,8 @@
         </div>
         <div class="comment-user">
             <div class="comment-user-avatar">
-                <img :src="`${avatarUrl}${avatarId}?s=256&d=identicon`" alt="">
+                <img :src="`${avatarUrl}${avatarId}?s=256&d=${systemOptionsStore.getSystemOptions.value?.comment_gravatar_default}`"
+                    alt="">
             </div>
             <div class="comment-user-info">
                 <div>
@@ -20,7 +21,7 @@
             </div>
         </div>
         <n-collapse-transition :show="isSwitch" appear>
-            <div class="w-full flex md:space-x-5 input-container">
+            <div class="w-full flex flex-col space-y-5 md:space-y-0 md:flex-row md:space-x-5 input-container">
                 <div class="form-input sm:w-full md:w-1/3">
                     <n-input placeholder="昵称 *" v-model:value="dataForm.author" size="large" @blur="onInputBlur">
                         <template #prefix>
@@ -66,12 +67,13 @@
 </template>
 
 <script setup lang='ts'>
-import { NButton, NCollapseTransition, NInput, NPopover, useMessage } from 'naive-ui';
 import IconUser from '@/components/icons/IconUser.vue';
 import IconEmail from '@/components/icons/IconEmail.vue';
 import IconLink from '@/components/icons/IconLink.vue';
 import IconCommentPoint from '@/components/icons/IconCommentPoint.vue';
 import IconEmojiSmile from '@/components/icons/IconEmojiSmile.vue';
+import { NButton, NCollapseTransition, NInput, NPopover, useMessage } from 'naive-ui';
+import { useSystemOptionsStore } from "@/stores/systemOptions";
 import { computed, inject, onMounted, ref } from 'vue';
 import { Md5 } from "ts-md5";
 import EmojiPicker from 'vue3-emoji-picker'
@@ -88,7 +90,8 @@ const commentApis: any = inject("commentApis");
 const postId: any = inject("postId");
 
 const message = useMessage();
-const avatarUrl = import.meta.env.VITE_AVATAR_BASE_URL;
+const systemOptionsStore = useSystemOptionsStore();
+const avatarUrl = computed(() => systemOptionsStore.getSystemOptions.value?.gravatar_source);
 const avatarId = ref("");
 const isSwitch = ref(true);
 const isLoading = ref(false);
@@ -267,6 +270,7 @@ const reset = () => {
 
             .n-input__prefix {
                 margin-right: 10px;
+                color: var(--theme-text-color-2);
 
                 svg {
                     width: 15px;

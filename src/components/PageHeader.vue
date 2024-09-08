@@ -1,9 +1,8 @@
 <template>
     <div class="page-header" :class="{ 'full-screen': isFullScreen }">
-        <div class="page-header-bg" :style="getBgUrl" />
+        <img class="page-header-bg" :src="getBgUrl" />
         <div class="page-header-main">
-            <div class="page-header-main-title md:text-4xl lg:text-4xl xl:text-5xl"
-                :style="`transform: translate3d(0, ${offsetY}px, 0)`">
+            <div class="page-header-main-title text-4xl md:text-4xl lg:text-4xl xl:text-5xl">
                 <slot>{{ store.getUserInfo.value?.username }}'s Blog</slot>
             </div>
             <div class="page-down" @click="$emit('pageDown', true)">
@@ -19,8 +18,7 @@ import { ChevronDownOutline } from '@vicons/ionicons5';
 import { NIcon } from 'naive-ui';
 import { computed, onMounted } from 'vue';
 import WaveEffect from './WaveEffect.vue';
-import { useScroll } from '@vueuse/core'
-import { usePageRouterStore } from "@/stores/user";
+import { useUserStore } from "@/stores/user";
 
 const props = defineProps({
     isFullScreen: Boolean, //是否高度铺满
@@ -28,25 +26,15 @@ const props = defineProps({
 })
 
 const emit = defineEmits(["pageDown"]);
-
-const { y } = useScroll(window);
-let pageHeaderDom: any = undefined;
-const store = usePageRouterStore();
+const store = useUserStore();
 
 onMounted(() => {
-    pageHeaderDom = document.querySelector(".page-header");
+
 });
 
-const getBgUrl = computed(() => props.bgUrl ? `background-image: url(${props.bgUrl})` : "");
-// const getBgUrl = computed(() => props.bgUrl ? props.bgUrl : new URL("@/assets/img/bg.webp", import.meta.url).href);
+// const getBgUrl = computed(() => props.bgUrl ? `background-image: url(${props.bgUrl})` : "");
+const getBgUrl = computed(() => props.bgUrl ? props.bgUrl : new URL("@/assets/img/bg.webp", import.meta.url).href);
 
-const offsetY = computed(() => {
-    return y.value < pageHeaderDom?.offsetHeight ? y.value : pageHeaderDom?.offsetHeight;
-})
-
-const pageDownClick = () => {
-    // emit("pageDown", true);
-}
 
 </script>
 
@@ -77,13 +65,7 @@ const pageDownClick = () => {
     width: 100%;
     height: 70vh;
     position: relative;
-    background-color: #111827;
-
-    // animation: fade-down .3s;
-
-    // background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-    // animation: gradientBG 15s ease infinite;
-    // background-size: 400% 400%;
+    z-index: -2;
 
     &::after {
         content: "";
@@ -109,24 +91,31 @@ const pageDownClick = () => {
 }
 
 .full-screen {
-    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
+    transition: all 0.3s;
 
     .page-down {
         display: initial;
+    }
+
+    .page-header-bg {
+        height: 100vh;
     }
 }
 
 .page-header-bg {
     width: 100%;
-    height: 100%;
-    position: absolute;
+    height: 70vh;
+    position: fixed;
     top: 0;
     left: 0;
-    background: url("@/assets/img/bg.webp");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    object-fit: cover;
+    z-index: -9;
+    // background: url("@/assets/img/bg.webp");
+    // background-repeat: no-repeat;
+    // background-size: 100% 800px;
+    // background-position: center;
+    // background-attachment: fixed;
     animation: fadein 1s ease-in-out;
 
 }
@@ -144,10 +133,7 @@ const pageDownClick = () => {
 }
 
 .page-header-main-title {
-    // position: fixed;
-    position: relative;
-    // position: sticky;
-    // top: 50%;
+    position: fixed;
     z-index: -1;
     animation: fade-down .3s;
 }

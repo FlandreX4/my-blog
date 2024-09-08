@@ -2,6 +2,7 @@
   --theme-color: #333;
   --theme-color-2: #333;
   --theme-text-color: #333;
+  --theme-text-color-2: #363636;
   --theme-grey-0: #fff;
   --theme-grey-1: #fdfdfd;
   --theme-grey-2: #f7f7f7;
@@ -37,6 +38,7 @@
   --theme-color: #d1d5db;
   --theme-color-2: #fff;
   --theme-text-color: #aaa;
+  --theme-text-color-2: #a9a9b3;
   --theme-grey-2: #3f3f3f;
   --theme-grey-6: #ccc;
   --theme-grey-7: #e4e4e4;

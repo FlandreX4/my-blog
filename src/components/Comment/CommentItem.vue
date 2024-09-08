@@ -75,14 +75,15 @@ const onReplyClick = (obj: any) => {
 
 .markdown-body {
     box-sizing: border-box;
-    min-width: 200px;
     max-width: 100%;
     background-color: var(--theme-background);
     color: var(--theme-color);
+    transition: all 0.3s;
 
     :deep(pre) {
         background-color: var(--theme-pre-background-color);
         color: var(--theme-pre-color);
+        transition: all 0.3s;
     }
 }
 
@@ -108,7 +109,7 @@ const onReplyClick = (obj: any) => {
 
     .comment-main-header {
         display: flex;
-        // color: #667c99;
+        flex-wrap: wrap;
         color: var(--theme-blue-1);
         font-size: 12px;
         line-height: 18px;
@@ -152,8 +153,8 @@ const onReplyClick = (obj: any) => {
     }
 
     .comment-reply {
-        color: rgba(51, 51, 51, 0.9);
-
+        color: var(--theme-text-color-2);
+        transition: all 0.3s;
         font-size: 12px;
 
         &>span {
