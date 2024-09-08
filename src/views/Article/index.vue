@@ -1,77 +1,75 @@
 <template>
     <DetailPageHeader :article="{ ...article }" />
-    <div class="article">
-        <DynamicBackground />
-        <div class="article-container">
-            <Card class="article-card">
-                <v-md-preview ref="articleRef" :text="article?.originalContent"></v-md-preview>
-                <div class="article-post">
-                    <div class="tag-list">
-                        <RouterLink :to="item.fullPath" v-for="item in article?.tags" :key="item.id"
-                            :style="{ color: item.color, backgroundColor: bgColor(item.color) }">
-                            <span class="tag-hover" :style="{ backgroundColor: bgColor(item.color) }"></span>
-                            <NIcon :component="PricetagsSharp" />
-                            {{ item.name }}
-                        </RouterLink>
-                    </div>
-                    <div class="copyright">
-                        <ul>
-                            <li>
-                                <NIcon :component="ShareSocial" />
-                                <strong>版权声明：</strong>
-                                采用
-                                <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">知识共享署名4.0</a>
-                                国际许可协议进行许可
-                            </li>
-                            <li>
-                                <NIcon :component="Link" />
-                                <strong>本文链接：</strong>
-                                <RouterLink :to="getArticlePath">
-                                    {{ getArticleLink }}
-                                </RouterLink>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="post-nav">
-                        <div class="post-nav-item"
-                            :style="{ 'background-image': `url(${getThumbnail(prevArticle?.thumbnail)})` }">
-                            <RouterLink :to="prevArticle?.fullPath" v-if="prevArticle">
-                                <span class="post-nav-btn">上一篇</span>
-                                <h3 class="post-nav-title">{{ prevArticle?.title }}</h3>
-                            </RouterLink>
-                            <div v-else>
-                                <span class="post-nav-btn">上一篇</span>
-                                <h3 class="post-nav-title">{{ prevArticle?.title }}</h3>
-                            </div>
-                        </div>
-                        <div class="post-nav-item"
-                            :style="{ 'background-image': `url(${getThumbnail(nextArticle?.thumbnail)})` }">
-                            <RouterLink :to="nextArticle?.fullPath" v-if="nextArticle">
-                                <span class="post-nav-btn">下一篇</span>
-                                <h3 class="post-nav-title">{{ nextArticle?.title || '无' }}</h3>
-                            </RouterLink>
-                            <div v-else>
-                                <span class="post-nav-btn">下一篇</span>
-                                <h3 class="post-nav-title">{{ nextArticle?.title || '无' }}</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <Comment :postId="article?.id" :commentApis="{ addComment, getCommentList }" />
+    <PageLayout class="article">
+        <Card class="article-card">
+            <v-md-preview ref="articleRef" :text="article?.originalContent"></v-md-preview>
+            <div class="article-post">
+                <div class="tag-list">
+                    <RouterLink :to="item.fullPath" v-for="item in article?.tags" :key="item.id"
+                        :style="{ color: item.color, backgroundColor: bgColor(item.color) }">
+                        <span class="tag-hover" :style="{ backgroundColor: bgColor(item.color) }"></span>
+                        <NIcon :component="PricetagsSharp" />
+                        {{ item.name }}
+                    </RouterLink>
                 </div>
-            </Card>
-            <div class="sidebar" v-if="articleLoaded && isShowCatalog">
-                <Card class="sidebar-container">
-                    <Catalog :domRef="articleRef" @callback="(list) => isShowCatalog = list.length > 0" />
-                </Card>
+                <div class="copyright">
+                    <ul>
+                        <li>
+                            <NIcon :component="ShareSocial" />
+                            <strong>版权声明：</strong>
+                            采用
+                            <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">知识共享署名4.0</a>
+                            国际许可协议进行许可
+                        </li>
+                        <li>
+                            <NIcon :component="Link" />
+                            <strong>本文链接：</strong>
+                            <RouterLink :to="getArticlePath">
+                                {{ getArticleLink }}
+                            </RouterLink>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="post-nav">
+                    <div class="post-nav-item"
+                        :style="{ 'background-image': `url(${getThumbnail(prevArticle?.thumbnail)})` }">
+                        <RouterLink :to="prevArticle?.fullPath" v-if="prevArticle">
+                            <span class="post-nav-btn">上一篇</span>
+                            <h3 class="post-nav-title">{{ prevArticle?.title }}</h3>
+                        </RouterLink>
+                        <div v-else>
+                            <span class="post-nav-btn">上一篇</span>
+                            <h3 class="post-nav-title">{{ prevArticle?.title }}</h3>
+                        </div>
+                    </div>
+                    <div class="post-nav-item"
+                        :style="{ 'background-image': `url(${getThumbnail(nextArticle?.thumbnail)})` }">
+                        <RouterLink :to="nextArticle?.fullPath" v-if="nextArticle">
+                            <span class="post-nav-btn">下一篇</span>
+                            <h3 class="post-nav-title">{{ nextArticle?.title || '无' }}</h3>
+                        </RouterLink>
+                        <div v-else>
+                            <span class="post-nav-btn">下一篇</span>
+                            <h3 class="post-nav-title">{{ nextArticle?.title || '无' }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <Comment :postId="article?.id" :commentApis="{ addComment, getCommentList }" />
             </div>
+        </Card>
+        <div class="sidebar" v-if="articleLoaded && isShowCatalog">
+            <Card class="sidebar-container">
+                <Catalog :domRef="articleRef" @callback="(list) => isShowCatalog = list.length > 0" />
+            </Card>
         </div>
-    </div>
+    </PageLayout>
 </template>
 
 <script setup lang='ts'>
 import Card from '@/components/Card.vue';
 import DetailPageHeader from '@/components/DetailPageHeader.vue';
+import PageLayout from '@/components/Layout/PageLayout.vue';
 import { computed, onMounted, ref, watch } from 'vue';
 import { getArticleByName, getPrevArticle, getNextArticle } from "@/api/article";
 import Catalog from '@/components/Catalog/index.vue'
@@ -137,15 +135,12 @@ const getPageArticle = () => {
 
 <style lang='less' scoped>
 .article {
-    position: relative;
+    overflow: initial;
 }
 
-.article-container {
-    width: calc(100% - 20px);
-    max-width: 1160px;
-    padding: 100px 0;
-    margin: 0 auto;
-    display: flex;
+.article :deep(.page-layout-container) {
+  max-width: 1160px;
+  display: flex;
 }
 
 .article-card {

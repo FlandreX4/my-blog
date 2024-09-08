@@ -48,6 +48,7 @@ declare module 'vue' {
     List: typeof import('./src/components/List.vue')['default']
     MobileMenuDrawer: typeof import('./src/components/mobile/MobileMenuDrawer.vue')['default']
     PageHeader: typeof import('./src/components/PageHeader.vue')['default']
+    PageLayout: typeof import('./src/components/Layout/PageLayout.vue')['default']
     Pagination: typeof import('./src/components/Pagination.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

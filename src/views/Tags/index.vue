@@ -1,17 +1,15 @@
 <template>
     <PageHeader>{{ tagName }}</PageHeader>
-    <div class="tags">
-        <!-- <DynamicBackground /> -->
-        <div class="tags-container">
-            <List :list="list" />
-            <Pagination :page="dataForm.page + 1" :pages="dataForm.pages" @pageChange="pageChange" />
-        </div>
-    </div>
+    <PageLayout>
+        <List :list="list" />
+        <Pagination :page="dataForm.page + 1" :pages="dataForm.pages" @pageChange="pageChange" />
+    </PageLayout>
 </template>
 
 <script setup lang='ts'>
 import PageHeader from '@/components/PageHeader.vue';
 import List from '@/components/List.vue';
+import PageLayout from '@/components/Layout/PageLayout.vue';
 import Pagination from '@/components/Pagination.vue';
 import { getArticlesByTagName } from "@/api/tags";
 import { useRoute } from 'vue-router';
@@ -62,15 +60,4 @@ const pageChange = (val: any) => {
 
 </script>
 
-<style lang='less' scoped>
-.tags {
-    position: relative;
-
-    .tags-container {
-        max-width: 970px;
-        width: calc(100% - 20px);
-        margin: 0 auto;
-        padding: 100px 0;
-    }
-}
-</style>
+<style lang='less' scoped></style>

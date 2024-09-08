@@ -10,7 +10,7 @@ onMounted(() => {
   import("@/utils/storesRequest");
   resetVhAndPx()
   // 监听resize事件 视图大小发生变化就重新计算1vh的值
-  window.addEventListener('resize', resetVhAndPx)
+  // window.addEventListener('resize', resetVhAndPx)
 })
 
 const resetVhAndPx = () => {

@@ -36,6 +36,11 @@
   background: #a7b5fd;
 }
 
+body {
+  background-color: var(--theme-background);
+  transition: all 0.3s;
+}
+
 @media (max-width: 419px) {
   .vuepress-markdown-body div {
     margin: 0 !important;

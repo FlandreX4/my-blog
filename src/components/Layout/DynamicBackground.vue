@@ -1,6 +1,5 @@
 <template>
-    <div class="particles" :y="y" :getOffsetTop="particlesOffsetTop"
-        :class="{ 'particles-scroll': isParticlesScroll() && particlesOffsetTop && y >= particlesOffsetTop }">
+    <div class="particles" :class="{ 'particles-scroll': showClass() }">
         <div class="particles-layer particles-layer-1"></div>
         <div class="particles-layer particles-layer-2"></div>
         <div class="particles-layer particles-layer-3"></div>
@@ -8,7 +7,7 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { gsap } from "gsap";
 import { useScroll } from '@vueuse/core';
 import { getOffsetTop } from "@/utils/util";
@@ -42,14 +41,21 @@ onMounted(() => {
     particlesOffsetTop.value = getOffsetTop(particlesDom);
 });
 
-//对比遮罩层是否大于内容层，防止遮罩层撑大内容层
-const isParticlesScroll = () => {
-    //body高度减去遮罩层距离顶部的offsetTop
-    let h = document.body.offsetHeight - particlesOffsetTop.value;
-    return particlesDom && h >= particlesDom.offsetHeight;
+const showClass = () => {
+    return particlesOffsetTop.value && y.value >= particlesOffsetTop.value;
 }
 
+// //对比遮罩层是否大于内容层，防止遮罩层撑大内容层
+// const isParticlesScroll = () => {
+//     //body高度减去遮罩层距离顶部的offsetTop
+//     let h = document.body.offsetHeight - particlesOffsetTop.value;
+//     return particlesDom && h >= particlesDom.offsetHeight;
+// }
+
 function particlesMousemove(e: MouseEvent) {
+    if (window.innerWidth <= 767) {
+        return;
+    }
     let t = {
         x: window.innerWidth / 2,
         y: window.innerHeight / 2
@@ -78,24 +84,16 @@ function particlesMousemove(e: MouseEvent) {
 
 <style lang='less' scoped>
 .particles {
-    // position: fixed;
     position: absolute;
     left: 0;
     top: 0;
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    // opacity: 0.6;
     z-index: -2;
     pointer-events: none;
     background-color: var(--theme-background);
-    transition: all 0.3s;
-    // &::before {
-    //     content: "";
-    //     position: absolute;
-    //     width: 100%;
-    //     height: 100%;
-    // }
+    transition: background-color 0.3s;
 }
 
 .particles-scroll {
@@ -128,5 +126,11 @@ html[theme] .particles-layer {
 
 .particles-layer-3 {
     background-image: url("@/assets/img/dynamicBg/dbg3.svg");
+}
+
+@media (max-width: 767px) {
+    .particles-layer {
+        display: none;
+    }
 }
 </style>

@@ -1,26 +1,24 @@
 <template>
   <PageHeader>关于页面</PageHeader>
-  <div class="about">
-    <DynamicBackground />
-    <div class="about-container">
-      <Card class="about-card">
-        <v-md-preview ref="previewRef" :text="about?.originalContent"></v-md-preview>
-        <div class="about-post">
-          <Comment :postId="about?.id" :commentApis="{ addComment, getCommentList }" />
-        </div>
-      </Card>
-      <div class="sidebar" v-if="isLoaded && isShowCatalog">
-        <Card class="sidebar-container">
-          <Catalog :domRef="previewRef" @callback="(list: any) => isShowCatalog = list.length > 0" />
-        </Card>
+  <PageLayout class="about">
+    <Card class="about-card">
+      <v-md-preview ref="previewRef" :text="about?.originalContent"></v-md-preview>
+      <div class="about-post">
+        <Comment :postId="about?.id" :commentApis="{ addComment, getCommentList }" />
       </div>
+    </Card>
+    <div class="sidebar" v-if="isLoaded && isShowCatalog">
+      <Card class="sidebar-container">
+        <Catalog :domRef="previewRef" @callback="(list: any) => isShowCatalog = list.length > 0" />
+      </Card>
     </div>
-  </div>
+  </PageLayout>
 </template>
 
 <script setup lang='ts'>
 import { onMounted, ref } from 'vue';
 import PageHeader from '@/components/PageHeader.vue';
+import PageLayout from '@/components/Layout/PageLayout.vue';
 import Card from '@/components/Card.vue';
 import Comment from '@/components/Comment/Comment.vue';
 import Catalog from '@/components/Catalog/index.vue';
@@ -47,15 +45,12 @@ const getList = () => {
 
 <style lang='less' scoped>
 .about {
-  position: relative;
+  overflow: initial;
 }
 
-.about-container {
-  display: flex;
-  width: calc(100% - 20px);
+.about :deep(.page-layout-container) {
   max-width: 1160px;
-  margin: 0 auto;
-  padding: 100px 0;
+  display: flex;
 }
 
 .about-card {

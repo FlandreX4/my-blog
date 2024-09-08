@@ -90,4 +90,10 @@ const bgUrl = computed(() => {
     margin-right: 15px;
   }
 }
+
+@media (max-width: 767px) {
+  .detail-container {
+    margin-top: 10px;
+  }
+}
 </style>

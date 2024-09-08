@@ -7,8 +7,8 @@
         </div>
         <div class="footer-box">
             <div>
-                <span>This blog has running : {{ getRunningTime }} <span class="my-face">ღゝ◡╹)ノ♡</span></span>
-
+                <span>This blog has running : {{ getRunningTime }}0</span>
+                <span class="my-face">ღゝ◡╹)ノ♡</span>
             </div>
             <div>
                 <a href="http://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">{{
@@ -65,13 +65,15 @@ const dateFormet = (second: number) => {
     min-height: 100px;
     left: 0;
     right: 0;
-    padding: 180px 0 15px 0;
+    position: absolute;
+    z-index: 1;
+    padding: 150px 0 15px 0;
     color: #888;
     line-height: 1.5;
-    position: absolute;
     font-size: 12px;
     background-color: var(--theme-background);
     transition: all 0.3s;
+    overflow: hidden;
 }
 
 .footer-bg {
@@ -83,6 +85,7 @@ const dateFormet = (second: number) => {
     // z-index: -1;
     transform: translate3d(0, 0, 0);
     transition: all 0.3s;
+    overflow: hidden;
 
     &>div {
         height: 150px;

@@ -1,16 +1,14 @@
 <template>
     <PageHeader>{{ category }}</PageHeader>
-    <div class="categories">
-        <DynamicBackground />
-        <div class="categories-container">
-            <List :list="list" />
-            <Pagination :page="dataForm.page + 1" :pages="dataForm.pages" @pageChange="pageChange" />
-        </div>
-    </div>
+    <PageLayout>
+        <List :list="list" />
+        <Pagination :page="dataForm.page + 1" :pages="dataForm.pages" @pageChange="pageChange" />
+    </PageLayout>
 </template>
 
 <script setup lang='ts'>
 import PageHeader from '@/components/PageHeader.vue';
+import PageLayout from '@/components/Layout/PageLayout.vue';
 import List from '@/components/List.vue';
 import Pagination from '@/components/Pagination.vue';
 import { getArticlesByCategory } from "@/api/categories";
@@ -62,15 +60,4 @@ const pageChange = (val: any) => {
 
 </script>
 
-<style lang='less' scoped>
-.categories {
-    position: relative;
-
-    .categories-container {
-        max-width: 970px;
-        width: calc(100% - 20px);
-        margin: 0 auto;
-        padding: 100px 0;
-    }
-}
-</style>
+<style lang='less' scoped></style>

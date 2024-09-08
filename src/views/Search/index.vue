@@ -1,26 +1,24 @@
 <template>
     <PageHeader>{{ `关于 [${dataForm.keyword}] 的搜索结果` }}</PageHeader>
-    <div class="search">
-        <DynamicBackground />
-        <div class="search-container">
-            <div class="search-input">
-                <el-input v-model="searchVal" placeholder="Search" @keyup.enter="onSearch">
-                    <template #prefix>
-                        <IconSearch @click="onSearch" />
-                    </template>
-                </el-input>
-            </div>
-            <template v-if="list && list.length > 1">
-                <List :list="list" />
-                <Pagination :page="dataForm.page + 1" :pages="dataForm.pages" @pageChange="pageChange" />
-            </template>
-            <h1 class="empty" v-else>Sorry! Nothing Found...</h1>
+    <PageLayout>
+        <div class="search-input">
+            <el-input v-model="searchVal" placeholder="Search" @keyup.enter="onSearch">
+                <template #prefix>
+                    <IconSearch @click="onSearch" />
+                </template>
+            </el-input>
         </div>
-    </div>
+        <template v-if="list && list.length > 1">
+            <List :list="list" />
+            <Pagination :page="dataForm.page + 1" :pages="dataForm.pages" @pageChange="pageChange" />
+        </template>
+        <h1 class="empty" v-else>Sorry! Nothing Found...</h1>
+    </PageLayout>
 </template>
 
 <script setup lang='ts'>
 import PageHeader from '@/components/PageHeader.vue';
+import PageLayout from '@/components/Layout/PageLayout.vue';
 import List from '@/components/List.vue';
 import Pagination from '@/components/Pagination.vue';
 import { getArticlesByKeyword } from "@/api/article";
@@ -86,17 +84,6 @@ const pageChange = (val: any) => {
 </script>
 
 <style lang='less' scoped>
-.search {
-    position: relative;
-}
-
-.search-container {
-    max-width: 970px;
-    width: calc(100% - 20px);
-    margin: 0 auto;
-    padding: 100px 0;
-}
-
 .search-input {
     margin-bottom: 50px;
 

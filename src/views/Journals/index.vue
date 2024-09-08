@@ -1,42 +1,40 @@
 <template>
   <PageHeader>日志</PageHeader>
-  <div class="journals">
-    <DynamicBackground />
-    <div class="journals-container">
-      <div class="journals-card" v-for="(item, index) in journalList" :key="item.id">
-        <div class="card-header">
-          <div class="card-header-img">
-            <img :src="store.getUserInfo.value?.avatar" alt="">
-          </div>
-          <div>
-            <div class="card-header-name">
-              <span>{{ store.getUserInfo.value?.nickname }}</span>
-              <IconAccount />
-            </div>
-            <div class="card-header-time">{{ timeAgo(item.createTime) }}</div>
-          </div>
-        </div>
-        <v-md-preview class="preview" ref="articleRef" :text="item?.sourceContent"></v-md-preview>
-        <hr class="post-line" />
-        <div class="journals-action">
-          <span>
-            <IconMessage @click="commentClick(index)" />
-            <span>{{ item.commentCount }}</span>
-          </span>
+  <PageLayout class="journals">
+    <div class="journals-card" v-for="(item, index) in journalList" :key="item.id">
+      <div class="card-header">
+        <div class="card-header-img">
+          <img :src="store.getUserInfo.value?.avatar" alt="">
         </div>
         <div>
-          <n-collapse-transition :show="commentShowIndex == index" appear>
-            <Comment :postId="item.id" miniTitle :commentApis="{ addComment, getCommentList }" />
-          </n-collapse-transition>
+          <div class="card-header-name">
+            <span>{{ store.getUserInfo.value?.nickname }}</span>
+            <IconAccount />
+          </div>
+          <div class="card-header-time">{{ timeAgo(item.createTime) }}</div>
         </div>
       </div>
-      <Pagination :page="dataForm.page + 1" :pages="dataForm.pages" @pageChange="pageChange" />
+      <v-md-preview class="preview" ref="articleRef" :text="item?.sourceContent"></v-md-preview>
+      <hr class="post-line" />
+      <div class="journals-action">
+        <span>
+          <IconMessage @click="commentClick(index)" />
+          <span>{{ item.commentCount }}</span>
+        </span>
+      </div>
+      <div>
+        <n-collapse-transition :show="commentShowIndex == index" appear>
+          <Comment :postId="item.id" miniTitle :commentApis="{ addComment, getCommentList }" />
+        </n-collapse-transition>
+      </div>
     </div>
-  </div>
+    <Pagination :page="dataForm.page + 1" :pages="dataForm.pages" @pageChange="pageChange" />
+  </PageLayout>
 </template>
 
 <script setup lang='ts'>
 import PageHeader from '@/components/PageHeader.vue';
+import PageLayout from '@/components/Layout/PageLayout.vue';
 import IconAccount from '@/components/icons/IconAccount.vue'
 import IconMessage from '@/components/icons/IconMessage.vue'
 import Pagination from '@/components/Pagination.vue';
@@ -85,16 +83,10 @@ const commentClick = (index: any) => {
 </script>
 
 <style lang='less' scoped>
-.journals {
-  position: relative;
-  overflow: hidden;
-}
-
-.journals-container {
-  width: 100%;
+.journals :deep(.page-layout-container) {
   max-width: 900px;
-  margin: 55px auto 0 auto;
-  padding: 0 35px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .journals-card {

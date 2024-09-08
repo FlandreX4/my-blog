@@ -2,13 +2,13 @@
     <div class="page-header" :class="{ 'full-screen': isFullScreen }">
         <img class="page-header-bg" :src="getBgUrl" />
         <div class="page-header-main">
-            <div class="page-header-main-title text-4xl md:text-4xl lg:text-4xl xl:text-5xl">
+            <div class="page-header-main-title text-3xl md:text-4xl lg:text-4xl xl:text-5xl">
                 <slot>{{ store.getUserInfo.value?.username }}'s Blog</slot>
             </div>
-            <div class="page-down" @click="$emit('pageDown', true)">
-                <n-icon class="animate-bounce" size="40" :component="ChevronDownOutline" />
-            </div>
             <WaveEffect />
+        </div>
+        <div class="page-down" @click="$emit('pageDown', true)">
+            <n-icon class="animate-bounce" size="40" :component="ChevronDownOutline" />
         </div>
     </div>
 </template>
@@ -65,7 +65,6 @@ const getBgUrl = computed(() => props.bgUrl ? props.bgUrl : new URL("@/assets/im
     width: 100%;
     height: 70vh;
     position: relative;
-    z-index: -2;
 
     &::after {
         content: "";
@@ -76,18 +75,18 @@ const getBgUrl = computed(() => props.bgUrl ? props.bgUrl : new URL("@/assets/im
         height: 100%;
         background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAKUlEQVQImU3IMREAIAgAwJfNkQCEsH8cijjpMf6vnXlQaIiJFx+omEBfmqIEZLe2jzcAAAAASUVORK5CYII=");
     }
+}
 
-    .page-down {
-        position: absolute;
-        bottom: 70px;
-        left: 50%;
-        transform: translate(-50%, 0);
-        cursor: pointer;
-        user-select: none;
-        z-index: 1;
-        display: none;
-        color: var(--theme-svg-color-0);
-    }
+.page-down {
+    position: absolute;
+    bottom: 70px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    cursor: pointer;
+    user-select: none;
+    z-index: 2;
+    display: none;
+    color: var(--theme-svg-color-0);
 }
 
 .full-screen {
@@ -110,12 +109,6 @@ const getBgUrl = computed(() => props.bgUrl ? props.bgUrl : new URL("@/assets/im
     top: 0;
     left: 0;
     object-fit: cover;
-    z-index: -9;
-    // background: url("@/assets/img/bg.webp");
-    // background-repeat: no-repeat;
-    // background-size: 100% 800px;
-    // background-position: center;
-    // background-attachment: fixed;
     animation: fadein 1s ease-in-out;
 
 }
@@ -134,7 +127,16 @@ const getBgUrl = computed(() => props.bgUrl ? props.bgUrl : new URL("@/assets/im
 
 .page-header-main-title {
     position: fixed;
-    z-index: -1;
     animation: fade-down .3s;
+}
+
+@media (max-width: 767px) {
+    .page-header {
+        height: 50vh;
+    }
+
+    .page-header-bg {
+        height: 50vh;
+    }
 }
 </style>

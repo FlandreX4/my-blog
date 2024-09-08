@@ -1,7 +1,6 @@
 <template>
     <PageHeader>文章归档</PageHeader>
-    <div class="archive">
-        <DynamicBackground />
+    <PageLayout>
         <Card class="custom-card">
             <div class="archive-container">
                 <div class="article-timeline" v-for="item in archiveList" :key="item.year">
@@ -13,12 +12,13 @@
             </div>
 
         </Card>
-    </div>
+    </PageLayout>
 </template>
 
 <script setup lang='ts'>
 import Card from '@/components/Card.vue';
 import PageHeader from '@/components/PageHeader.vue';
+import PageLayout from '@/components/Layout/PageLayout.vue';
 import Timeline from '@/components/Timeline.vue';
 import { getArchives } from "@/api/archives";
 import { onMounted, ref } from 'vue';
@@ -47,14 +47,6 @@ const archiveList = ref();
 </script>
 
 <style lang='less' scoped>
-.archive {
-    // min-height: 1500px;
-    margin: 0 auto;
-    padding: 80px 0;
-    position: relative;
-    z-index: 1;
-}
-
 .archive-container {
     margin-left: 50px;
 }
@@ -64,11 +56,6 @@ const archiveList = ref();
     font-weight: 800;
     color: var(--theme-color);
     line-height: 60px;
-}
-
-.custom-card {
-    max-width: 968px;
-    width: calc(100% - 20px);
 }
 
 @media (max-width: 767px) {
