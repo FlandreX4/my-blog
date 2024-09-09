@@ -23,9 +23,11 @@ import Card from '@/components/Card.vue';
 import Comment from '@/components/Comment/Comment.vue';
 import Catalog from '@/components/Catalog/index.vue';
 import { getAbout, addComment, getCommentList } from "@/api/about";
+import { setHeadTitle } from "@/utils/util";
 
 
 onMounted(() => {
+  setHeadTitle();
   getList();
 });
 

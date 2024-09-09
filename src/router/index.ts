@@ -5,42 +5,42 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "home",
+      name: "首页",
       component: () => import("@/views/Home/index.vue"),
     },
     {
       path: "/archives",
-      name: "archives",
+      name: "文章归档",
       component: () => import("@/views/Archives/index.vue"),
     },
     {
       path: "/archives/:name",
-      name: "archivesArticle",
+      name: "文章",
       component: () => import("@/views/Article/index.vue"),
     },
     {
       path: "/categories/:name",
-      name: "categories",
+      name: "分类",
       component: () => import("@/views/Categories/index.vue"),
     },
     {
       path: "/tags/:name",
-      name: "tags",
+      name: "标签",
       component: () => import("@/views/Tags/index.vue"),
     },
     {
       path: "/search/:name",
-      name: "search",
+      name: "搜索",
       component: () => import("@/views/Search/index.vue"),
     },
     {
       path: "/about",
-      name: "about",
+      name: "关于",
       component: () => import("@/views/About/index.vue"),
     },
     {
       path: "/journals",
-      name: "journals",
+      name: "日志",
       component: () => import("@/views/Journals/index.vue"),
     },
     // {

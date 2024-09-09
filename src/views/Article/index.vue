@@ -79,7 +79,7 @@ import Comment from '@/components/Comment/Comment.vue';
 import { addComment, getCommentList } from "@/api/comment";
 import { RouterLink, useRoute } from 'vue-router';
 import { parseColorString } from "@/utils/colorConversion";
-import { getThumbnail } from "@/utils/util";
+import { getThumbnail, setHeadTitle } from "@/utils/util";
 
 const route = useRoute();
 const article = ref();
@@ -90,6 +90,7 @@ const prevArticle = ref();
 const nextArticle = ref();
 
 onMounted(async () => {
+    setHeadTitle();
     getList();
 });
 
@@ -118,6 +119,7 @@ const getList = () => {
     getArticleByName(route.params.name).then(({ data }) => {
         article.value = data.data;
         articleLoaded.value = true;
+        setHeadTitle(article.value?.title);
         getPageArticle();
     })
 }
@@ -139,8 +141,8 @@ const getPageArticle = () => {
 }
 
 .article :deep(.page-layout-container) {
-  max-width: 1160px;
-  display: flex;
+    max-width: 1160px;
+    display: flex;
 }
 
 .article-card {

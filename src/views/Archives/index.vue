@@ -22,8 +22,10 @@ import PageLayout from '@/components/Layout/PageLayout.vue';
 import Timeline from '@/components/Timeline.vue';
 import { getArchives } from "@/api/archives";
 import { onMounted, ref } from 'vue';
+import { setHeadTitle } from "@/utils/util";
 
 onMounted(() => {
+    setHeadTitle();
     getArchives().then(({ data }) => {
         let arr: any = [];
         let list = data.data;
@@ -36,8 +38,6 @@ onMounted(() => {
                 arr.push(item);
             }
         })
-        console.log('arr:', arr);
-
         archiveList.value = arr;
     })
 });

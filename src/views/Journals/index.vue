@@ -43,7 +43,7 @@ import { onMounted, ref } from 'vue';
 import { NCollapseTransition } from 'naive-ui';
 import { getJournals, getCommentList, addComment } from "@/api/journals";
 import { useUserStore } from "@/stores/user";
-import { timeAgo } from "@/utils/util";
+import { timeAgo, setHeadTitle } from "@/utils/util";
 
 const dataForm = ref({
   page: 0,
@@ -55,6 +55,7 @@ const store = useUserStore();
 const commentShowIndex = ref();
 
 onMounted(() => {
+  setHeadTitle();
   getList();
 });
 

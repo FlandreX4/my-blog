@@ -14,6 +14,7 @@ import Pagination from '@/components/Pagination.vue';
 import { getArticlesByTagName } from "@/api/tags";
 import { useRoute } from 'vue-router';
 import { onMounted, ref, watch } from 'vue';
+import { setHeadTitle } from "@/utils/util";
 
 const route = useRoute();
 const tagName = ref();
@@ -27,11 +28,13 @@ const list = ref();
 watch(() => route.params.name, () => {
     init();
     tagName.value = route.params.name;
+    setHeadTitle(`标签：${tagName.value}`);
     getList();
 })
 
 onMounted(() => {
     tagName.value = route.params.name;
+    setHeadTitle(`标签：${tagName.value}`);
     getList();
 });
 

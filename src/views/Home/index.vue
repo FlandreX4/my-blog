@@ -18,7 +18,7 @@
                         </svg>
                         <span>公告</span>
                     </div>
-                    <div class="notice-content">欢迎来到Flandre的博客~</div>
+                    <div class="notice-content">{{ `欢迎来到${store.getUserInfo.value?.nickname}的博客~` }}</div>
                 </div>
             </div>
 
@@ -34,7 +34,8 @@ import { getArticleList } from "@/api/article";
 import Pagination from '@/components/Pagination.vue';
 import { useUserStore } from "@/stores/user";
 import List from '@/components/List.vue';
-import SideCard from '@/components/SideCard.vue'
+import SideCard from '@/components/SideCard.vue';
+import { setHeadTitle } from "@/utils/util";
 
 const dataForm = ref({
     page: 0,
@@ -46,6 +47,7 @@ const articleList = ref();
 const store = useUserStore();
 
 onMounted(() => {
+    setHeadTitle();
     getList();
 });
 
@@ -78,8 +80,8 @@ const pageChange = (val: any) => {
 }
 
 .home :deep(.page-layout-container) {
-  max-width: 1160px;
-  display: flex;
+    max-width: 1160px;
+    display: flex;
 }
 
 .main-container-left {

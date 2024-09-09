@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { useRoute } from "vue-router";
 
 /**
  * time ago
@@ -78,4 +79,15 @@ export function getOffsetTop(dom: any, count: any = 0, rootTagName: any = "BODY"
   } else {
     return count;
   }
+}
+
+/**
+ * 设置浏览器头部标题
+ * @param title //标题
+ */
+export function setHeadTitle(title: any = undefined) {
+  const route = useRoute();
+  console.log("route:", route);
+
+  document.title = title ? title : route.name;
 }

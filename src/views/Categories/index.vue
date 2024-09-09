@@ -14,6 +14,7 @@ import Pagination from '@/components/Pagination.vue';
 import { getArticlesByCategory } from "@/api/categories";
 import { useRoute } from 'vue-router';
 import { onMounted, ref, watch } from 'vue';
+import { setHeadTitle } from "@/utils/util";
 
 const route = useRoute();
 const category = ref();
@@ -27,11 +28,13 @@ const list = ref();
 watch(() => route.params.name, () => {
     init();
     category.value = route.params.name;
+    setHeadTitle(`分类：${category.value}`);
     getList();
 })
 
 onMounted(() => {
     category.value = route.params.name;
+    setHeadTitle(`分类：${category.value}`);
     getList();
 });
 

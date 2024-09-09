@@ -24,6 +24,7 @@ import Pagination from '@/components/Pagination.vue';
 import { getArticlesByKeyword } from "@/api/article";
 import { useRoute, useRouter } from 'vue-router';
 import { onMounted, ref, watch } from 'vue';
+import { setHeadTitle } from "@/utils/util";
 
 const route = useRoute();
 const router = useRouter();
@@ -40,12 +41,14 @@ watch(() => route.params.name, () => {
     init();
     let str: any = route.params.name;
     dataForm.value.keyword = str;
+    setHeadTitle(`搜索结果：${str}`);
     getList();
 })
 
 onMounted(() => {
     let str: any = route.params.name;
     dataForm.value.keyword = str;
+    setHeadTitle(`搜索结果：${str}`);
     getList();
 });
 
