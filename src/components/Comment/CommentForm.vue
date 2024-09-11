@@ -50,9 +50,9 @@
         </div>
         <div class="form-action">
             <div class="action-emoji">
-                <n-popover trigger="click" class="emoji-popover" style="padding: 0">
+                <n-popover trigger="click" v-model:show="showPopover" class="emoji-popover" style="padding: 0" :display-directive="'show'">
                     <template #trigger>
-                        <IconEmojiSmile />
+                        <IconEmojiSmile @click="() => showPopover = !showPopover" />
                     </template>
                     <EmojiPicker :native="true" @select="onSelectEmoji" hide-group-names
                         :theme="getTheme() ? 'dark' : 'light'" />
@@ -93,6 +93,7 @@ const message = useMessage();
 const systemOptionsStore = useSystemOptionsStore();
 const avatarUrl = computed(() => systemOptionsStore.getSystemOptions.value?.gravatar_source);
 const avatarId = ref("");
+const showPopover = ref(false);
 const isSwitch = ref(true);
 const isLoading = ref(false);
 const dataForm = ref({
@@ -123,6 +124,7 @@ const content = computed(() => {
 
 const onSelectEmoji = (emoji: any) => {
     dataForm.value.content += emoji.i;
+    showPopover.value = false;
 }
 
 const md5Email = () => {
