@@ -87,7 +87,13 @@ export function getOffsetTop(dom: any, count: any = 0, rootTagName: any = "BODY"
  */
 export function setHeadTitle(title: any = undefined) {
   const route = useRoute();
-  console.log("route:", route);
-
   document.title = title ? title : route.name;
 }
+
+/**
+ * 判断移动端
+ */
+export function isMobile() {
+  let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i);
+  return flag;
+ }

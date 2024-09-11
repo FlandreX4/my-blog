@@ -59,7 +59,6 @@ const pagination = ref({
 provide("postId", postId);
 
 watch(() => props.postId, () => {
-    console.log('postId:', props.postId);
     postId.value = props.postId;
     nextTick(() => {
         getList();
@@ -71,7 +70,6 @@ onMounted(() => {
 });
 
 const onPageChange = (page: any) => {
-    console.log("page:", page);
     pagination.value.page = page - 1;
     commentList.value = [];
     getList();

@@ -29,7 +29,6 @@ const emit = defineEmits(["pageDown"]);
 const store = useUserStore();
 
 onMounted(() => {
-
 });
 
 // const getBgUrl = computed(() => props.bgUrl ? `background-image: url(${props.bgUrl})` : "");
@@ -98,7 +97,7 @@ const getBgUrl = computed(() => props.bgUrl ? props.bgUrl : new URL("@/assets/im
     }
 
     .page-header-bg {
-        height: 100vh;
+        height: calc(var(--vh, 1vh) * 100);
     }
 }
 
@@ -137,6 +136,14 @@ const getBgUrl = computed(() => props.bgUrl ? props.bgUrl : new URL("@/assets/im
 
     .page-header-bg {
         height: 50vh;
+    }
+
+    .full-screen {
+        height: calc(var(--vh, 1vh) * 100);
+
+        .page-header-bg {
+            height: calc(var(--vh, 1vh) * 100);
+        }
     }
 }
 </style>
