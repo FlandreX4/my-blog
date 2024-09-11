@@ -1,5 +1,5 @@
 <template>
-  <PageHeader>关于页面</PageHeader>
+  <PageHeader :bgUrl="bgUrl">关于页面</PageHeader>
   <PageLayout class="about">
     <Card class="about-card">
       <v-md-preview ref="previewRef" :text="about?.originalContent"></v-md-preview>
@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang='ts'>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import PageHeader from '@/components/PageHeader.vue';
 import PageLayout from '@/components/Layout/PageLayout.vue';
 import Card from '@/components/Card.vue';
@@ -24,6 +24,7 @@ import Comment from '@/components/Comment/Comment.vue';
 import Catalog from '@/components/Catalog/index.vue';
 import { getAbout, addComment, getCommentList } from "@/api/about";
 import { setHeadTitle } from "@/utils/util";
+import { isUrl } from "@/utils/util";
 
 
 onMounted(() => {
@@ -35,6 +36,14 @@ const about = ref();
 const previewRef = ref();
 const isShowCatalog = ref(true);
 const isLoaded = ref(false);
+
+const serveBaseUrl = import.meta.env.VITE_SERVICE_BASE_URL;
+const bgUrl = computed(() => {
+  if (!about.value?.thumbnail) {
+    return;
+  }
+  return isUrl(about.value?.thumbnail) ? about.value?.thumbnail : serveBaseUrl + about.value?.thumbnail;
+});
 
 const getList = () => {
   getAbout("about").then(({ data }) => {

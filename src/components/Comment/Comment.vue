@@ -59,10 +59,12 @@ const pagination = ref({
 provide("postId", postId);
 
 watch(() => props.postId, () => {
-    postId.value = props.postId;
-    nextTick(() => {
-        getList();
-    })
+    if (props.postId) {
+        postId.value = props.postId;
+        nextTick(() => {
+            getList();
+        })
+    }
 }, { immediate: true })
 
 onMounted(() => {

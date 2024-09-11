@@ -40,18 +40,18 @@
                         </RouterLink>
                         <div v-else>
                             <span class="post-nav-btn">上一篇</span>
-                            <h3 class="post-nav-title">{{ prevArticle?.title }}</h3>
+                            <h3 class="post-nav-title">{{ '无' }}</h3>
                         </div>
                     </div>
                     <div class="post-nav-item"
                         :style="{ 'background-image': `url(${getThumbnail(nextArticle?.thumbnail)})` }">
                         <RouterLink :to="nextArticle?.fullPath" v-if="nextArticle">
                             <span class="post-nav-btn">下一篇</span>
-                            <h3 class="post-nav-title">{{ nextArticle?.title || '无' }}</h3>
+                            <h3 class="post-nav-title">{{ nextArticle?.title }}</h3>
                         </RouterLink>
                         <div v-else>
                             <span class="post-nav-btn">下一篇</span>
-                            <h3 class="post-nav-title">{{ nextArticle?.title || '无' }}</h3>
+                            <h3 class="post-nav-title">{{ '无' }}</h3>
                         </div>
                     </div>
                 </div>

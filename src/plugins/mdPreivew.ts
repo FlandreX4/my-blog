@@ -8,6 +8,16 @@ import Prism from "prismjs";
 
 import hljs from "highlight.js";
 
+VMdPreview.xss.extend({
+  // 扩展白名单
+  whiteList: {
+    style: [],
+    script: ["src", "type"],
+    document: [],
+    alert: []
+  },
+});
+
 VMdPreview.use(vuepressTheme, {
   Prism,
   Hljs: hljs,
