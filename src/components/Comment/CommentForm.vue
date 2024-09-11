@@ -122,7 +122,6 @@ const content = computed(() => {
 })
 
 const onSelectEmoji = (emoji: any) => {
-    console.log("emoji:", emoji);
     dataForm.value.content += emoji.i;
 }
 
