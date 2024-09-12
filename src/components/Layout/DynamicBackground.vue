@@ -40,7 +40,7 @@ onMounted(() => {
     //获取遮罩层距离顶部的offsetTop
     particlesOffsetTop.value = getOffsetTop(particlesDom);
 });
-
+//脱离文档流挡防止内容高度变化造成页面回流(重排)导致的性能问题
 const showClass = () => {
     return particlesOffsetTop.value && y.value >= particlesOffsetTop.value;
 }
