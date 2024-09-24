@@ -1,49 +1,14 @@
 <template>
     <div class="timeline">
-        <div class=" timeline-item">
+        <div class=" timeline-item" v-for="item in list" :key="item.month">
             <div class="timeline-icon">
-                12月
+                {{ item.month }}月
             </div>
-            <div>
-                <a href="" class="timeline-item-container">
-                    <span>03-06</span>
-                    <span>[记录] 注册表修改jar文件打开方式</span>
-                </a>
-                <a href="" class="timeline-item-container">
-                    <span>03-06</span>
-                    <span>[记录] 注册表修改jar文件打开方式</span>
-                </a>
-                <a href="" class="timeline-item-container">
-                    <span>03-06</span>
-                    <span>[记录] 注册表修改jar文件打开方式</span>
-                </a>
-                <a href="" class="timeline-item-container">
-                    <span>03-06</span>
-                    <span>[记录] 注册表修改jar文件打开方式</span>
-                </a>
-            </div>
-        </div>
-
-        <div class=" timeline-item">
-            <div class="timeline-icon">
-                3月
-            </div>
-            <div>
-                <a href="" class="timeline-item-container">
-                    <span>03-06</span>
-                    <span>[记录] 注册表修改jar文件打开方式</span>
-                </a>
-            </div>
-        </div>
-        <div class=" timeline-item">
-            <div class="timeline-icon">
-                3月
-            </div>
-            <div>
-                <a href="" class="timeline-item-container">
-                    <span>03-06</span>
-                    <span>[记录] 注册表修改jar文件打开方式</span>
-                </a>
+            <div class="timeline-item-container" v-for="childItem in item.posts">
+                <RouterLink :to="`/archives/${childItem.slug}`">
+                    <span>{{ dayjs(childItem.createTime).format("MM-DD") }}</span>
+                    <span class="timeline-item-title">{{ childItem.title }}</span>
+                </RouterLink>
             </div>
         </div>
     </div>
@@ -51,6 +16,12 @@
 
 <script setup lang='ts'>
 import { onMounted } from 'vue';
+import { RouterLink } from 'vue-router';
+import dayjs from "dayjs";
+
+const props = defineProps({
+    list: Array<any>,
+});
 
 onMounted(() => {
 
@@ -78,12 +49,13 @@ onMounted(() => {
     }
 
     .timeline-icon {
-        background-color: #b7c1c7;
-        top: 22.5px;
+        // background-color: #b7c1c7;
+        background-color: #d4d4d4;
+        top: 24px;
         left: 24px;
         padding: 0 10px;
-        border-radius: 28px;
-        color: #fff;
+        border-radius: 4px;
+        color: var(--theme-grey-2);
         text-transform: uppercase;
         font-weight: 600;
         line-height: 2;
@@ -93,39 +65,47 @@ onMounted(() => {
     }
 
     .timeline-item-container {
-        display: block;
-        position: relative;
-        display: block;
-        margin-left: 21px;
-        padding: 8px 0;
-        line-height: 24px;
         transition: color .15s;
-        color: #52616a;
+        // color: #52616a;
+        color: var(--theme-blue-2);
         transition: all 0.2s;
 
-        &::before {
-            position: absolute;
-            top: 50%;
-            left: -14px;
-            content: "-";
-            opacity: 0.63;
-            transform: translateY(-50%);
+        &>a {
+            display: flex;
+            margin-left: 21px;
+            position: relative;
+            line-height: 28px;
+            padding: 8px 0;
+
+            &>span {
+                font-size: 16px;
+            }
+
+            &>span:nth-child(1) {
+                padding-right: 7px;
+                white-space: nowrap;
+                letter-spacing: 1px;
+                font-size: 12px;
+                opacity: .63;
+            }
+
+            &::before {
+                position: absolute;
+                top: 22px;
+                left: -14px;
+                content: "-";
+                opacity: 0.63;
+                transform: translateY(-50%);
+            }
         }
 
-        &:hover {
-            opacity: 0.7;
-        }
+        .timeline-item-title {
+            transition: box-shadow .5s cubic-bezier(.71, 0, 0, .99);
+            display: table-cell;
 
-        &>span {
-            font-size: 16px;
-        }
-
-        &>span:nth-child(1) {
-            padding-right: 7px;
-            white-space: nowrap;
-            letter-spacing: 1px;
-            font-size: 12px;
-            opacity: .63;
+            &:hover {
+                box-shadow: inset 0 -.8em var(--theme-shadow-color-3);
+            }
         }
     }
 }

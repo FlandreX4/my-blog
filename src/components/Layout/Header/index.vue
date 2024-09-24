@@ -1,66 +1,94 @@
 <template>
   <div class="header" :class="{ 'header-bg-change': isHeaderBgChange }">
-    <div class="header-left">
-      <div class="header-logo">Flandre</div>
-      <ul class="header-menu">
-        <li>
-          <RouterLink to="/">
-            <n-icon :component="Home" />
-            <span>首页</span>
-          </RouterLink>
-        </li>
+    <div class="header-container">
+      <div class="header-left">
+        <div class="header-logo">{{ store.getUserInfo.value?.username }}</div>
+        <ul class="header-menu">
+          <li>
+            <RouterLink to="/">
+              <n-icon :component="Home" />
+              <span>首页</span>
+            </RouterLink>
+          </li>
 
-        <li>
-          <RouterLink to="/archive">
-            <IconArticle />
-            <span>文章</span>
-          </RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">
-            <IconBook />
-            <span>日志页面</span>
-          </RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">
+          <li>
+            <RouterLink to="/archives">
+              <IconArticle />
+              <span>文章</span>
+            </RouterLink>
+          </li>
+          <li>
+            <RouterLink to="/journals">
+              <IconBook />
+              <span>日志页面</span>
+            </RouterLink>
+          </li>
+          <!-- <li>
+          <RouterLink to="/links">
             <IconLink />
             <span>友链</span>
           </RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/">
-            <IconPaperPlane />
-            <span>关于页面</span>
-          </RouterLink>
-        </li>
-      </ul>
+        </li> -->
+          <li>
+            <RouterLink to="/about">
+              <IconPaperPlane />
+              <span>关于页面</span>
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+      <div class="mobile-header-left">
+        <div class="menu-outlined" :class="{ 'menu-outlined_active': isMenuOutlined }"
+          @click="() => isMenuOutlined = !isMenuOutlined">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+      <div class="header-right">
+        <DaySwitch @change="switchChange" />
+        <div class="search">
+          <IconSearch @click="() => searchVisible = !searchVisible" />
+        </div>
+      </div>
     </div>
-    <div class="day-switch switch-sun">
-      <div class="sunMoon"></div>
-    </div>
+
   </div>
+  <Search v-model="searchVisible" @searchDone="searchDone" />
+  <MobileMenuDrawer v-model="isMenuOutlined" />
+  <n-back-top :show="showBackTop" :right="20" />
 </template>
 
 <script setup lang='ts'>
 import { Home } from '@vicons/ionicons5';
-import { NIcon } from 'naive-ui';
+import { NIcon, NBackTop } from 'naive-ui';
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-gsap.registerPlugin(ScrollTrigger);
-
-import { onMounted, ref } from 'vue';
+import IconSearch from '@/components/icons/IconSearch.vue'
+import { nextTick, onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
+import { useUserStore } from "@/stores/user";
 import IconArticle from '@/components/icons/IconArticle.vue';
 import IconBook from '@/components/icons/IconBook.vue';
 import IconLink from '@/components/icons/IconLink.vue';
 import IconPaperPlane from '@/components/icons/IconPaperPlane.vue';
 
+import Search from '@/components/Search.vue'
+import DaySwitch from '../../DaySwitch.vue'
+import MobileMenuDrawer from '@/components/mobile/MobileMenuDrawer.vue'
+
+gsap.registerPlugin(ScrollTrigger);
+
 onMounted(() => {
   GsapTimeline();
 });
 
-let isHeaderBgChange = ref(false);
+let t1: any = undefined;
+const isHeaderBgChange = ref(false);
+const showBackTop = ref(false);
+const searchVisible = ref(false);
+const isMenuOutlined = ref(false);
+const store = useUserStore();
 
 const onScrollTriggerUpdate = (self: any) => {
   // console.log("progress", self.progress)
@@ -69,16 +97,45 @@ const onScrollTriggerUpdate = (self: any) => {
   } else {
     isHeaderBgChange.value = false;
   }
+
+  if (self.progress >= 1) {
+    showBackTop.value = true;
+  } else {
+    showBackTop.value = false;
+  }
+}
+
+const getTheme = () => document.documentElement.getAttribute("theme");
+
+const getEleAttribute = (cssName: string) => getComputedStyle(document.documentElement).getPropertyValue(cssName);
+
+const searchDone = (val: any) => {
+  searchVisible.value = val;
+}
+
+const switchChange = () => {
+  gsapInit();
+}
+
+const gsapInit = () => {
+  t1.kill();
+  let dom: any = document.querySelector(".header");
+  let dom2: any = document.querySelector(".menu-outlined");
+  dom.style.cssText = "";
+  dom2.style.cssText = "";
+  nextTick(() => {
+    GsapTimeline();
+  })
 }
 
 const GsapTimeline = () => {
-  let t1 = gsap.timeline({
+  t1 = gsap.timeline({
     scrollTrigger: {
       // trigger: ".home",
       // pin: true, // 在执行时固定触发器元素
-      start: "top top-=100px", // 当触发器的顶部碰到视口的顶部时
-      end: '+=700',
-      scrub: 0.5, //将动画的进度直接链接到滚动条上
+      start: "top top-=80px", // 当触发器的顶部碰到视口的顶部时
+      end: '+=40%',
+      scrub: 0.5, //将动画的进度直接链接到滚动条进度上
       //   end: "+=700", // 在滚动 700 px后结束
       onUpdate: onScrollTriggerUpdate,
     },
@@ -87,16 +144,24 @@ const GsapTimeline = () => {
   t1.to(
     ".header",
     {
-      backgroundColor: "rgba(255, 255, 255, 0.8)",
-      boxShadow: "inset 0 0 2px #c5c5c5d1",
+      // backgroundColor: "rgba(255, 255, 255, 0.8)",
+      backgroundColor: getEleAttribute("--theme-background-a7"),
+      boxShadow: getTheme() ? "inset 0 0 2px rgba(197, 197, 197, 0.18)" : "inset 0 0 2px rgba(197, 197, 197, 0.82)",
     }
   );
   t1.to(
     ".header",
     {
-      color: "#333",
+      color: getTheme() ? getEleAttribute("--theme-grey-0") : "#333",
     },
     "-=50%"
+  );
+  t1.to(
+    ".menu-outlined",
+    {
+      '--bgColor': getTheme() ? getEleAttribute("--theme-grey-0") : "#333",
+    },
+    "<"
   );
   t1.fromTo(
     ".header",
@@ -116,20 +181,19 @@ const GsapTimeline = () => {
   position: fixed;
   left: 0;
   top: 0;
-  width: 100%;
-  height: 75px;
-  padding: 8px 20%;
   z-index: 10;
-  color: white;
+  width: 100%;
+  color: var(--theme-grey-0);
+}
 
-  // box-shadow: inset 0 0 2px #c5c5c5d1;
-  // -webkit-backdrop-filter: saturate(200%) blur(30px);
-  // backdrop-filter: saturate(200%) blur(30px);
-  // background-color: rgba(255, 255, 255, 0.8);
-
+.header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 1160px;
+  height: 75px;
+  padding: 8px 0;
+  margin: 0 auto;
 }
 
 .header-bg-change {
@@ -173,49 +237,90 @@ const GsapTimeline = () => {
 
     &>a {
       padding: 10px;
-      display: inline-block;
       display: flex;
       align-items: center;
     }
   }
 
   &>li:not(& > li:last-child) {
-    margin-right: 20px;
+    margin-right: 15px;
   }
 }
 
-.day-switch {
-  background: #324164;
-  width: 65px;
-  height: 25px;
-  z-index: 5;
-  border-radius: 25px;
-  box-shadow: 0 15px 10px -10px #0003, 0 5px 10px #0000001a;
-  border: 2px solid #1e2d50;
-  overflow: hidden;
-  position: relative;
+.header-right {
+  display: flex;
+  align-items: center;
 
-  .sunMoon {
-    background: #f0e1a5;
-    height: 16px;
-    width: 16px;
-    border-radius: 100%;
-    border: 2px solid #ccc091;
-    position: absolute;
-    left: 3px;
-    top: 2.5px;
+  svg {
+    cursor: pointer;
   }
-
 }
 
-.switch-sun {
-  border: 2px solid #52a6bf;
-  background: #5ebedb;
+.search {
+  margin-left: 13px;
 
-  .sunMoon {
-    background: #ffdf61;
-    border: 2px solid #d9b31c;
-    left: calc(100% - 23px);
+  svg {
+    width: 23px;
+    height: 23px;
+  }
+}
+
+.mobile-header-left {
+  display: none;
+
+  .menu-outlined {
+    width: 22px;
+    --bgColor: var(--theme-grey-0);
+
+    &>span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background-color: var(--bgColor);
+      transition: all 0.4s;
+      position: relative;
+      border-radius: 2px;
+
+      &:not(&:first-child) {
+        margin-top: 3px;
+      }
+    }
+  }
+
+  .menu-outlined_active {
+    &>span:nth-child(1) {
+      transform: translateY(5px) rotate(-45deg);
+    }
+
+    &>span:nth-child(2) {
+      opacity: 0;
+    }
+
+    &>span:nth-child(3) {
+      transform: translateY(-5px) rotate(45deg);
+    }
+  }
+}
+
+
+@media (max-width: 1250px) {
+  .header-container {
+    width: 100%;
+    padding: 8px 25px;
+  }
+}
+
+@media (max-width: 767px) {
+  .header-left {
+    display: none;
+  }
+
+  .mobile-header-left {
+    display: initial;
+  }
+
+  .header-container {
+    height: 60px;
   }
 }
 </style>
