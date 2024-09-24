@@ -1,6 +1,8 @@
 <template>
     <div class="page-header" :class="{ 'full-screen': isFullScreen }">
-        <img class="page-header-bg" v-if="!bgReload" :src="getBgUrl" />
+        <div class="page-header-bg">
+            <img v-if="!bgReload" :src="getBgUrl" />
+        </div>
         <div class="page-header-main">
             <div class="page-header-main-title text-3xl md:text-4xl lg:text-4xl xl:text-5xl">
                 <slot>{{ store.getUserInfo.value?.username }}'s Blog</slot>
@@ -72,16 +74,6 @@ watch(() => props.bgUrl, () => {
     width: 100%;
     height: 70vh;
     position: relative;
-
-    &::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAKUlEQVQImU3IMREAIAgAwJfNkQCEsH8cijjpMf6vnXlQaIiJFx+omEBfmqIEZLe2jzcAAAAASUVORK5CYII=");
-    }
 }
 
 .page-down {
@@ -115,9 +107,23 @@ watch(() => props.bgUrl, () => {
     position: fixed;
     top: 0;
     left: 0;
-    object-fit: cover;
-    animation: fadein 1s ease-in-out;
 
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        animation: fadein 1s ease-in-out;
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAKUlEQVQImU3IMREAIAgAwJfNkQCEsH8cijjpMf6vnXlQaIiJFx+omEBfmqIEZLe2jzcAAAAASUVORK5CYII=");
+    }
 }
 
 .page-header-main {
