@@ -16,5 +16,6 @@
     box-shadow: 0 0 16px var(--theme-shadow-color);
     animation: slideUpIn 1s;
     background-color: var(--theme-background);
+    overflow: hidden;
 }
 </style>
