@@ -1,6 +1,6 @@
 <template>
     <div class="page-header" :class="{ 'full-screen': isFullScreen }">
-        <img class="page-header-bg" :src="getBgUrl" />
+        <img class="page-header-bg" v-if="!bgReload" :src="getBgUrl" />
         <div class="page-header-main">
             <div class="page-header-main-title text-3xl md:text-4xl lg:text-4xl xl:text-5xl">
                 <slot>{{ store.getUserInfo.value?.username }}'s Blog</slot>
@@ -16,7 +16,7 @@
 <script setup lang='ts'>
 import { ChevronDownOutline } from '@vicons/ionicons5';
 import { NIcon } from 'naive-ui';
-import { computed, onMounted } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 import WaveEffect from './WaveEffect.vue';
 import { useUserStore } from "@/stores/user";
 
@@ -28,11 +28,19 @@ const props = defineProps({
 const emit = defineEmits(["pageDown"]);
 const store = useUserStore();
 
+const bgReload = ref(false);
+const getBgUrl: any = ref(new URL("@/assets/img/bg.webp", import.meta.url).href);
+
 onMounted(() => {
 });
 
-// const getBgUrl = computed(() => props.bgUrl ? `background-image: url(${props.bgUrl})` : "");
-const getBgUrl = computed(() => props.bgUrl ? props.bgUrl : new URL("@/assets/img/bg.webp", import.meta.url).href);
+watch(() => props.bgUrl, () => {
+    bgReload.value = true;
+    getBgUrl.value = props.bgUrl;
+    nextTick(() => {
+        bgReload.value = false;
+    })
+})
 
 
 </script>
